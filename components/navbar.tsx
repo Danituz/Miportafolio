@@ -337,7 +337,7 @@ export function Navbar({
             >
               <Button
                 variant="ghost"
-                size="sm"
+                size="default"
                 className={cn(
                   "flex-1 justify-start gap-2 rounded-xl px-4 py-3",
                   isDark
@@ -352,7 +352,7 @@ export function Navbar({
 
               <Button
                 variant="ghost"
-                size="sm"
+                size="default"
                 className={cn(
                   "rounded-xl px-4 py-3",
                   isDark
