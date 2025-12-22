@@ -17,39 +17,39 @@ const projects = [
   {
     title: "ISC Producciones",
     description: "App de gestión de eventos para el área de audio y multimedia. Sistema mobile-first que permite administrar eventos y visualizar información en tiempo real.",
-    image: "/images/projects/01.svg",
+    image: "/images/proyectos/isc producciones.svg",
     tech: ["Next.js", "Supabase", "shadcn/ui"],
     link: "https://isc-producciones.vercel.app",
     size: "large",
   },
   {
-    title: "Tarjetas Digitales",
+    title: "Luxtar Cards",
     description: "Generador de tarjetas personalizadas para colaboradores con integración a redes sociales.",
-    image: "/images/projects/02.svg",
+    image: "/images/proyectos/luxtar cards.svg",
     tech: ["React", "Node.js", "Tailwind"],
     link: null,
     size: "medium",
   },
   {
-    title: "CMS Luxtar",
-    description: "Panel de gestión de contenido con módulos de métricas y análisis SEO.",
-    image: "/images/projects/03.svg",
+    title: "Mapdam",
+    description: "Plataforma de mapeo y gestión.",
+    image: "/images/proyectos/Mapdam.svg",
     tech: ["React", "Supabase"],
     link: null,
     size: "medium",
   },
   {
-    title: "Proyecto Personal",
-    description: "Exploración de animaciones y microinteracciones.",
-    image: "/images/projects/04.svg",
+    title: "Mensajeros",
+    description: "Aplicación de mensajería y logística.",
+    image: "/images/proyectos/mensajeros.svg",
     tech: ["Framer Motion"],
     link: null,
     size: "small",
   },
   {
-    title: "Landing Page",
-    description: "Diseño y desarrollo de landing para campaña.",
-    image: "/images/projects/05.svg",
+    title: "RAF App",
+    description: "Aplicación móvil de gestión.",
+    image: "/images/proyectos/raf.app.svg",
     tech: ["Astro", "Tailwind"],
     link: null,
     size: "small",
@@ -108,7 +108,7 @@ export default function ProyectosPage() {
               )}
             >
               <ArrowLeft className="h-4 w-4" />
-              Volver al inicio
+              VOLVER A INICIO
             </Link>
             <h1
               className={cn(
@@ -140,10 +140,10 @@ export default function ProyectosPage() {
               viewport={{ once: true }}
               transition={{ duration: 0.4 }}
               className={cn(
-                "group relative col-span-2 row-span-2 overflow-hidden rounded-2xl border transition-all hover:-translate-y-1",
+                "group relative col-span-2 row-span-2 overflow-hidden rounded-2xl transition-all hover:-translate-y-1",
                 isDark
-                  ? "border-indigo-100/10 bg-white/[0.02] hover:border-indigo-100/20"
-                  : "border-slate-200 bg-slate-50/50 hover:border-slate-300",
+                  ? "bg-white/[0.02]"
+                  : "bg-slate-50/50",
               )}
             >
               <div className="absolute inset-0">
@@ -217,10 +217,10 @@ export default function ProyectosPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: (idx + 1) * 0.1 }}
                 className={cn(
-                  "group relative overflow-hidden rounded-2xl border transition-all hover:-translate-y-1",
+                  "group relative overflow-hidden rounded-2xl transition-all hover:-translate-y-1",
                   isDark
-                    ? "border-indigo-100/10 bg-white/[0.02] hover:border-indigo-100/20"
-                    : "border-slate-200 bg-slate-50/50 hover:border-slate-300",
+                    ? "bg-white/[0.02]"
+                    : "bg-slate-50/50",
                 )}
               >
                 <div className="absolute inset-0">
@@ -284,10 +284,10 @@ export default function ProyectosPage() {
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: (idx + 3) * 0.1 }}
                 className={cn(
-                  "group relative overflow-hidden rounded-2xl border transition-all hover:-translate-y-1",
+                  "group relative overflow-hidden rounded-2xl transition-all hover:-translate-y-1",
                   isDark
-                    ? "border-indigo-100/10 bg-white/[0.02] hover:border-indigo-100/20"
-                    : "border-slate-200 bg-slate-50/50 hover:border-slate-300",
+                    ? "bg-white/[0.02]"
+                    : "bg-slate-50/50",
                 )}
               >
                 <div className="absolute inset-0">
