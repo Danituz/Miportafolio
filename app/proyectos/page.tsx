@@ -19,23 +19,18 @@ import {
   type ProjectCategory,
 } from "@/lib/projects";
 
-type Theme = "light" | "dark";
-
 // Category colors
 const categoryColors = {
   "desarrollo-web": {
-    dark: "bg-indigo-500/20 text-indigo-300 border-indigo-500/30",
-    light: "bg-indigo-100 text-indigo-700 border-indigo-200",
+    colors: "bg-indigo-500/20 text-indigo-300 border-indigo-500/30",
     accent: "hover:border-indigo-400",
   },
   prototipado: {
-    dark: "bg-purple-500/20 text-purple-300 border-purple-500/30",
-    light: "bg-purple-100 text-purple-700 border-purple-200",
+    colors: "bg-purple-500/20 text-purple-300 border-purple-500/30",
     accent: "hover:border-purple-400",
   },
   apps: {
-    dark: "bg-cyan-500/20 text-cyan-300 border-cyan-500/30",
-    light: "bg-cyan-100 text-cyan-700 border-cyan-200",
+    colors: "bg-cyan-500/20 text-cyan-300 border-cyan-500/30",
     accent: "hover:border-cyan-400",
   },
 };
@@ -47,7 +42,6 @@ const categoryIcons = {
 };
 
 export default function ProyectosPage() {
-  const [theme, setTheme] = useState<Theme>("dark");
   const [language, setLanguage] = useState<Language>("es");
   const [activeCategory, setActiveCategory] = useState<
     ProjectCategory | "all"
@@ -56,19 +50,15 @@ export default function ProyectosPage() {
 
   useEffect(() => {
     setMounted(true);
-    const savedTheme = window.localStorage.getItem("miportafolio-theme") as Theme | null;
     const savedLang = window.localStorage.getItem("miportafolio-language") as Language | null;
-    if (savedTheme) setTheme(savedTheme);
     if (savedLang) setLanguage(savedLang);
   }, []);
 
   useEffect(() => {
     if (!mounted) return;
-    window.localStorage.setItem("miportafolio-theme", theme);
     window.localStorage.setItem("miportafolio-language", language);
-  }, [theme, language, mounted]);
+  }, [language, mounted]);
 
-  const isDark = theme === "dark";
   const t = translations[language];
 
   const filteredProjects =
@@ -94,20 +84,13 @@ export default function ProyectosPage() {
   }
 
   return (
-    <div
-      className={cn(
-        "relative min-h-screen w-full transition-colors duration-300",
-        isDark ? "bg-gray-950 text-indigo-50" : "bg-white text-slate-900"
-      )}
-    >
+    <div className="relative min-h-screen w-full bg-gray-950 text-indigo-50">
       {/* Particles Background */}
-      <ParticlesBackground isDark={isDark} />
+      <ParticlesBackground />
 
       <Navbar
-        isDark={isDark}
         language={language}
         onLanguageChange={setLanguage}
-        onThemeToggle={() => setTheme(isDark ? "light" : "dark")}
       />
 
       <main className="mx-auto max-w-6xl px-4 pb-20 pt-6 sm:px-6 lg:px-8">
@@ -118,20 +101,10 @@ export default function ProyectosPage() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <h1
-            className={cn(
-              "font-ferron text-5xl uppercase leading-none sm:text-7xl lg:text-8xl",
-              isDark ? "text-indigo-100" : "text-indigo-800"
-            )}
-          >
+          <h1 className="font-ferron text-5xl uppercase leading-none text-indigo-100 sm:text-7xl lg:text-8xl">
             {t.projects.title}
           </h1>
-          <p
-            className={cn(
-              "mx-auto max-w-2xl font-general text-base leading-relaxed sm:text-lg",
-              isDark ? "text-indigo-100/70" : "text-slate-600"
-            )}
-          >
+          <p className="mx-auto max-w-2xl font-general text-base leading-relaxed text-indigo-100/70 sm:text-lg">
             {t.projectsPage.subtitle}
           </p>
         </motion.div>
@@ -149,25 +122,15 @@ export default function ProyectosPage() {
             className={cn(
               "flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-all duration-200",
               activeCategory === "all"
-                ? isDark
-                  ? "border-indigo-400 bg-indigo-500/20 text-indigo-200"
-                  : "border-indigo-500 bg-indigo-100 text-indigo-700"
-                : isDark
-                  ? "border-white/10 text-indigo-200/70 hover:border-white/20 hover:text-indigo-200"
-                  : "border-slate-200 text-slate-600 hover:border-slate-300 hover:text-slate-900"
+                ? "border-indigo-400 bg-indigo-500/20 text-indigo-200"
+                : "border-white/10 text-indigo-200/70 hover:border-white/20 hover:text-indigo-200"
             )}
           >
             {t.projectsPage.filterAll}
             <span
               className={cn(
                 "rounded-full px-1.5 py-0.5 text-[10px]",
-                activeCategory === "all"
-                  ? isDark
-                    ? "bg-indigo-400/30"
-                    : "bg-indigo-200"
-                  : isDark
-                    ? "bg-white/10"
-                    : "bg-slate-100"
+                activeCategory === "all" ? "bg-indigo-400/30" : "bg-white/10"
               )}
             >
               {projectCounts.all}
@@ -187,12 +150,8 @@ export default function ProyectosPage() {
                 className={cn(
                   "flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-all duration-200",
                   isActive
-                    ? isDark
-                      ? colors.dark + " border-current"
-                      : colors.light + " border-current"
-                    : isDark
-                      ? "border-white/10 text-indigo-200/70 hover:border-white/20"
-                      : "border-slate-200 text-slate-600 hover:border-slate-300"
+                    ? colors.colors + " border-current"
+                    : "border-white/10 text-indigo-200/70 hover:border-white/20"
                 )}
               >
                 <Icon className="h-4 w-4" />
@@ -200,11 +159,7 @@ export default function ProyectosPage() {
                 <span
                   className={cn(
                     "rounded-full px-1.5 py-0.5 text-[10px]",
-                    isActive
-                      ? "bg-current/20"
-                      : isDark
-                        ? "bg-white/10"
-                        : "bg-slate-100"
+                    isActive ? "bg-current/20" : "bg-white/10"
                   )}
                 >
                   {projectCounts[category.id]}
@@ -223,10 +178,7 @@ export default function ProyectosPage() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className={cn(
-                  "py-20 text-center text-lg",
-                  isDark ? "text-indigo-200/50" : "text-slate-400"
-                )}
+                className="py-20 text-center text-lg text-indigo-200/50"
               >
                 {t.projectsPage.noProjects}
               </motion.p>
@@ -240,7 +192,6 @@ export default function ProyectosPage() {
                   <ProjectCard
                     key={project.slug}
                     project={project}
-                    isDark={isDark}
                     language={language}
                     index={index}
                   />
@@ -259,12 +210,7 @@ export default function ProyectosPage() {
         >
           <Button
             variant="outline"
-            className={cn(
-              "gap-2 rounded-full border px-6 py-5 text-sm font-medium uppercase tracking-wider transition-all",
-              isDark
-                ? "border-white/20 text-indigo-200 hover:border-white/40 hover:bg-white/5"
-                : "border-slate-300 text-slate-700 hover:border-slate-400 hover:bg-slate-50"
-            )}
+            className="gap-2 rounded-full border border-white/20 px-6 py-5 text-sm font-medium uppercase tracking-wider text-indigo-200 transition-all hover:border-white/40 hover:bg-white/5"
             asChild
           >
             <a
@@ -280,7 +226,7 @@ export default function ProyectosPage() {
         </motion.div>
       </main>
 
-      <Footer isDark={isDark} language={language} />
+      <Footer language={language} />
     </div>
   );
 }
@@ -288,12 +234,10 @@ export default function ProyectosPage() {
 // Project Card Component
 function ProjectCard({
   project,
-  isDark,
   language,
   index,
 }: {
   project: Project;
-  isDark: boolean;
   language: Language;
   index: number;
 }) {
@@ -312,11 +256,7 @@ function ProjectCard({
       <Link
         href={`/proyectos/${project.slug}`}
         className={cn(
-          "group relative block overflow-hidden rounded-2xl border transition-all duration-300",
-          "hover:-translate-y-1 hover:shadow-xl",
-          isDark
-            ? "border-white/5 bg-white/[0.02] hover:border-white/10"
-            : "border-slate-200 bg-slate-50/50 hover:border-slate-300",
+          "group relative block overflow-hidden rounded-2xl border border-white/5 bg-white/[0.02] transition-all duration-300 hover:-translate-y-1 hover:border-white/10 hover:shadow-xl",
           colors.accent
         )}
       >
@@ -329,26 +269,16 @@ function ProjectCard({
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
             loading={index < 3 ? undefined : "lazy"}
             priority={index < 3}
-            className={cn(
-              "object-cover transition-transform duration-500 group-hover:scale-105",
-              isDark ? "opacity-70" : "opacity-80"
-            )}
+            className="object-cover opacity-70 transition-transform duration-500 group-hover:scale-105"
           />
-          <div
-            className={cn(
-              "absolute inset-0",
-              isDark
-                ? "bg-gradient-to-t from-gray-950 via-gray-950/50 to-transparent"
-                : "bg-gradient-to-t from-white via-white/50 to-transparent"
-            )}
-          />
+          <div className="absolute inset-0 bg-gradient-to-t from-gray-950 via-gray-950/50 to-transparent" />
 
           {/* Category Badge */}
           <div className="absolute left-4 top-4">
             <span
               className={cn(
                 "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-medium backdrop-blur-sm",
-                isDark ? colors.dark : colors.light
+                colors.colors
               )}
             >
               <Icon className="h-3 w-3" />
@@ -364,56 +294,28 @@ function ProjectCard({
             {project.tools.slice(0, 3).map((tool) => (
               <span
                 key={tool.name}
-                className={cn(
-                  "rounded-full px-2 py-0.5 text-[10px] font-medium",
-                  isDark
-                    ? "bg-white/5 text-indigo-200/80"
-                    : "bg-slate-100 text-slate-600"
-                )}
+                className="rounded-full bg-white/5 px-2 py-0.5 text-[10px] font-medium text-indigo-200/80"
               >
                 {tool.name}
               </span>
             ))}
             {project.tools.length > 3 && (
-              <span
-                className={cn(
-                  "rounded-full px-2 py-0.5 text-[10px]",
-                  isDark ? "text-indigo-200/50" : "text-slate-400"
-                )}
-              >
+              <span className="rounded-full px-2 py-0.5 text-[10px] text-indigo-200/50">
                 +{project.tools.length - 3}
               </span>
             )}
           </div>
 
           {/* Title & Description */}
-          <h3
-            className={cn(
-              "text-lg font-semibold transition-colors",
-              isDark
-                ? "text-indigo-50 group-hover:text-white"
-                : "text-slate-900 group-hover:text-indigo-700"
-            )}
-          >
+          <h3 className="text-lg font-semibold text-indigo-50 transition-colors group-hover:text-white">
             {project.title}
           </h3>
-          <p
-            className={cn(
-              "mt-1.5 line-clamp-2 text-sm leading-relaxed",
-              isDark ? "text-indigo-100/60" : "text-slate-500"
-            )}
-          >
+          <p className="mt-1.5 line-clamp-2 text-sm leading-relaxed text-indigo-100/60">
             {project.description[language]}
           </p>
 
           {/* View Project Link */}
-          <div
-            className={cn(
-              "mt-4 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider transition-all",
-              "opacity-0 group-hover:opacity-100",
-              isDark ? "text-indigo-400" : "text-indigo-600"
-            )}
-          >
+          <div className="mt-4 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-indigo-400 opacity-0 transition-all group-hover:opacity-100">
             {t.projectsPage.viewProject}
             <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </div>

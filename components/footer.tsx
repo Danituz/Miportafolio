@@ -3,15 +3,13 @@
 import Image from "next/image";
 import { Github, Linkedin } from "lucide-react";
 
-import { cn } from "@/lib/utils";
 import { translations, type Language } from "@/lib/translations";
 
 interface FooterProps {
-  isDark: boolean;
   language: Language;
 }
 
-export function Footer({ isDark, language }: FooterProps) {
+export function Footer({ language }: FooterProps) {
   const t = translations[language];
   const currentYear = new Date().getFullYear();
 

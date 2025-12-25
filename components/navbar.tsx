@@ -9,7 +9,6 @@ import {
   Menu,
   MessageCircle,
   Send,
-  SunMoon,
   X,
 } from "lucide-react";
 
@@ -32,17 +31,13 @@ export type NavItem = {
 };
 
 interface NavbarProps {
-  isDark: boolean;
   language: Language;
   onLanguageChange: (lang: Language) => void;
-  onThemeToggle: () => void;
 }
 
 export function Navbar({
-  isDark,
   language,
   onLanguageChange,
-  onThemeToggle,
 }: NavbarProps) {
   const t = translations[language];
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -114,42 +109,23 @@ export function Navbar({
   const inputClass = cn(
     "mt-1.5 w-full rounded-xl border px-3 py-2.5 text-sm font-normal outline-none transition-all",
     "focus:ring-2 focus:ring-indigo-500 focus:border-transparent",
+    "border-indigo-500/20 bg-zinc-950/60 text-indigo-50 placeholder:text-indigo-100/30 hover:border-indigo-500/40"
   );
 
   const contactFormContent = (
-    <DialogContent
-      className={cn(
-        "max-w-sm gap-4 rounded-2xl px-6 py-5 text-left",
-        !isDark && "border-indigo-200 bg-white/95 text-slate-900 shadow-2xl",
-      )}
-    >
+    <DialogContent className="max-w-sm gap-4 rounded-2xl px-6 py-5 text-left">
       <DialogHeader className="space-y-1 text-left">
-        <DialogTitle
-          className={cn(
-            "font-general text-lg font-bold uppercase",
-            isDark ? "text-indigo-50" : "text-slate-900",
-          )}
-        >
+        <DialogTitle className="font-general text-lg font-bold uppercase text-indigo-50">
           {t.contact.title}
         </DialogTitle>
-        <DialogDescription
-          className={cn(
-            "font-general text-sm",
-            isDark ? "text-indigo-100/70" : "text-slate-600",
-          )}
-        >
+        <DialogDescription className="font-general text-sm text-indigo-100/70">
           {t.contact.description}
         </DialogDescription>
       </DialogHeader>
 
       <form onSubmit={handleSubmit} className="space-y-3">
         <label className="block">
-          <span
-            className={cn(
-              "font-general text-[10px] font-semibold uppercase tracking-wide",
-              isDark ? "text-indigo-100/60" : "text-slate-500",
-            )}
-          >
+          <span className="font-general text-[10px] font-semibold uppercase tracking-wide text-indigo-100/60">
             {t.contact.name}
           </span>
           <input
@@ -160,22 +136,12 @@ export function Navbar({
               setFormData({ ...formData, name: e.target.value })
             }
             placeholder={t.contact.namePlaceholder}
-            className={cn(
-              inputClass,
-              isDark
-                ? "border-indigo-500/20 bg-zinc-950/60 text-indigo-50 placeholder:text-indigo-100/30 hover:border-indigo-500/40"
-                : "border-indigo-200 bg-white text-slate-900 placeholder:text-slate-400 hover:border-indigo-300",
-            )}
+            className={inputClass}
           />
         </label>
 
         <label className="block">
-          <span
-            className={cn(
-              "font-general text-[10px] font-semibold uppercase tracking-wide",
-              isDark ? "text-indigo-100/60" : "text-slate-500",
-            )}
-          >
+          <span className="font-general text-[10px] font-semibold uppercase tracking-wide text-indigo-100/60">
             {t.contact.email}
           </span>
           <input
@@ -186,22 +152,12 @@ export function Navbar({
               setFormData({ ...formData, email: e.target.value })
             }
             placeholder={t.contact.emailPlaceholder}
-            className={cn(
-              inputClass,
-              isDark
-                ? "border-indigo-500/20 bg-zinc-950/60 text-indigo-50 placeholder:text-indigo-100/30 hover:border-indigo-500/40"
-                : "border-indigo-200 bg-white text-slate-900 placeholder:text-slate-400 hover:border-indigo-300",
-            )}
+            className={inputClass}
           />
         </label>
 
         <label className="block">
-          <span
-            className={cn(
-              "font-general text-[10px] font-semibold uppercase tracking-wide",
-              isDark ? "text-indigo-100/60" : "text-slate-500",
-            )}
-          >
+          <span className="font-general text-[10px] font-semibold uppercase tracking-wide text-indigo-100/60">
             {t.contact.message}
           </span>
           <textarea
@@ -215,9 +171,7 @@ export function Navbar({
             className={cn(
               "mt-1.5 w-full resize-none rounded-xl border px-3 py-2.5 text-sm font-normal outline-none transition-all",
               "focus:ring-2 focus:ring-indigo-500 focus:border-transparent",
-              isDark
-                ? "border-indigo-500/20 bg-zinc-950/60 text-indigo-50 placeholder:text-indigo-100/30 hover:border-indigo-500/40"
-                : "border-indigo-200 bg-white text-slate-900 placeholder:text-slate-400 hover:border-indigo-300",
+              "border-indigo-500/20 bg-zinc-950/60 text-indigo-50 placeholder:text-indigo-100/30 hover:border-indigo-500/40"
             )}
           />
         </label>
@@ -225,10 +179,7 @@ export function Navbar({
         <Button
           type="submit"
           disabled={isSubmitting}
-          className={cn(
-            "w-full justify-center gap-2 text-xs",
-            !isDark && "bg-indigo-600 text-white hover:bg-indigo-500",
-          )}
+          className="w-full justify-center gap-2 text-xs"
         >
           {isSubmitting ? (
             <>
@@ -238,9 +189,7 @@ export function Navbar({
           ) : (
             <>
               {t.contact.send}
-                            <Send className="h-3.5 w-3.5" />
-
-
+              <Send className="h-3.5 w-3.5" />
             </>
           )}
         </Button>
@@ -251,25 +200,15 @@ export function Navbar({
   return (
     <>
       <header className="sticky top-0 z-50 w-full">
-        <div
-          className={cn(
-            "border-b backdrop-blur-xl transition-colors",
-            isDark
-              ? "border-white/10 bg-gray-950/70"
-              : "border-slate-200/60 bg-white/70",
-          )}
-        >
+        <div className="border-b border-white/10 bg-gray-950/70 backdrop-blur-xl transition-colors">
           <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-4 sm:px-6">
             {/* Logo */}
             <Link
               href="/"
-              className={cn(
-                "font-ferron text-xl font-bold uppercase tracking-wider transition hover:opacity-80",
-                isDark ? "text-indigo-50" : "text-indigo-900",
-              )}
+              className="font-ferron text-xl font-bold uppercase tracking-wider text-indigo-50 transition hover:opacity-80"
             >
               <Image
-                src={isDark ? "/mislogos/logodaniel.png" : "/mislogos/logodaniel_light.png"}
+                src="/mislogos/logodaniel.png"
                 alt="Daniel Tuz Logo"
                 width={60}
                 height={60}
@@ -284,22 +223,14 @@ export function Navbar({
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={cn(
-                    "font-general text-sm uppercase tracking-wider transition hover:text-indigo-400",
-                    isDark ? "text-indigo-100/80" : "text-slate-600",
-                  )}
+                  className="font-general text-sm uppercase tracking-wider text-indigo-100/80 transition hover:text-indigo-400"
                 >
                   {item.label}
                 </Link>
               ))}
               <Dialog open={contactOpen} onOpenChange={setContactOpen}>
                 <DialogTrigger asChild>
-                  <button
-                    className={cn(
-                      "font-general text-sm uppercase tracking-wider transition hover:text-indigo-400",
-                      isDark ? "text-indigo-100/80" : "text-slate-600",
-                    )}
-                  >
+                  <button className="font-general text-sm uppercase tracking-wider text-indigo-100/80 transition hover:text-indigo-400">
                     {t.nav.contact}
                   </button>
                 </DialogTrigger>
@@ -309,47 +240,18 @@ export function Navbar({
 
             {/* Desktop Controls */}
             <div className="hidden items-center gap-2 md:flex">
-              {/* Theme toggle - hidden for now
-              <Button
-                variant="ghost"
-                size="icon"
-                className={cn(
-                  "h-11 w-11 rounded-full",
-                  isDark
-                    ? "text-indigo-100/80 hover:bg-white/10 hover:text-indigo-50"
-                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900",
-                )}
-                onClick={onThemeToggle}
-                aria-label={isDark ? t.nav.lightMode : t.nav.darkMode}
-              >
-                <SunMoon className="h-6 w-6" />
-              </Button>
-              */}
-
               <div className="relative" ref={languageMenuRef}>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className={cn(
-                    "h-11 w-11 rounded-full",
-                    isDark
-                      ? "text-indigo-100/80 hover:bg-white/10 hover:text-indigo-50"
-                      : "text-slate-600 hover:bg-slate-100 hover:text-slate-900",
-                  )}
+                  className="h-11 w-11 rounded-full text-indigo-100/80 hover:bg-white/10 hover:text-indigo-50"
                   onClick={() => setLanguageMenuOpen((prev) => !prev)}
                   aria-label="Select language"
                 >
                   <Languages className="h-6 w-6" />
                 </Button>
                 {languageMenuOpen && (
-                  <div
-                    className={cn(
-                      "absolute right-0 z-20 mt-2 w-36 overflow-hidden rounded-xl border shadow-xl",
-                      isDark
-                        ? "border-white/10 bg-gray-900/95 backdrop-blur-md"
-                        : "border-slate-200 bg-white",
-                    )}
-                  >
+                  <div className="absolute right-0 z-20 mt-2 w-36 overflow-hidden rounded-xl border border-white/10 bg-gray-900/95 shadow-xl backdrop-blur-md">
                     {(["es", "en"] as Language[]).map((option) => (
                       <button
                         key={option}
@@ -362,9 +264,7 @@ export function Navbar({
                           "flex w-full items-center justify-between px-4 py-2.5 text-sm transition",
                           option === language
                             ? "bg-indigo-600 text-white"
-                            : isDark
-                              ? "text-indigo-100 hover:bg-white/5"
-                              : "text-slate-700 hover:bg-slate-50",
+                            : "text-indigo-100 hover:bg-white/5"
                         )}
                       >
                         {option === "es" ? "Español" : "English"}
@@ -381,12 +281,7 @@ export function Navbar({
             {/* Mobile Controls */}
             <div className="flex items-center gap-2 md:hidden">
               <button
-                className={cn(
-                  "flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold transition",
-                  isDark
-                    ? "text-indigo-100 hover:bg-white/10"
-                    : "text-slate-700 hover:bg-slate-100",
-                )}
+                className="flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold text-indigo-100 transition hover:bg-white/10"
                 onClick={() => onLanguageChange(language === "es" ? "en" : "es")}
                 aria-label="Change language"
               >
@@ -398,12 +293,7 @@ export function Navbar({
                   <Button
                     variant="ghost"
                     size="icon"
-                    className={cn(
-                      "h-10 w-10 rounded-full",
-                      isDark
-                        ? "text-indigo-100 hover:bg-white/10"
-                        : "text-slate-700 hover:bg-slate-100",
-                    )}
+                    className="h-10 w-10 rounded-full text-indigo-100 hover:bg-white/10"
                     aria-label={t.nav.contact}
                   >
                     <MessageCircle className="h-5 w-5" />
@@ -413,12 +303,7 @@ export function Navbar({
               </Dialog>
 
               <button
-                className={cn(
-                  "flex h-10 w-10 items-center justify-center rounded-full transition",
-                  isDark
-                    ? "text-indigo-100 hover:bg-white/10"
-                    : "text-slate-700 hover:bg-slate-100",
-                )}
+                className="flex h-10 w-10 items-center justify-center rounded-full text-indigo-100 transition hover:bg-white/10"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 aria-label="Menu"
               >
@@ -435,31 +320,20 @@ export function Navbar({
           <div
             className={cn(
               "overflow-hidden transition-all duration-300 md:hidden",
-              mobileMenuOpen ? "max-h-80" : "max-h-0",
+              mobileMenuOpen ? "max-h-80" : "max-h-0"
             )}
           >
-            <nav
-              className={cn(
-                "flex flex-col gap-1 border-t px-4 py-4",
-                isDark ? "border-white/5" : "border-slate-100",
-              )}
-            >
+            <nav className="flex flex-col gap-1 border-t border-white/5 px-4 py-4">
               {navItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={cn(
-                    "rounded-xl px-4 py-3 font-general text-sm uppercase tracking-wider transition",
-                    isDark
-                      ? "text-indigo-100 hover:bg-white/5"
-                      : "text-slate-700 hover:bg-slate-50",
-                  )}
+                  className="rounded-xl px-4 py-3 font-general text-sm uppercase tracking-wider text-indigo-100 transition hover:bg-white/5"
                 >
                   {item.label}
                 </Link>
               ))}
-
             </nav>
           </div>
         </div>
@@ -470,7 +344,7 @@ export function Navbar({
         onClose={() => setShowSuccess(false)}
         title={t.toast.success}
         description={t.toast.successDescription}
-        isDark={isDark}
+        isDark={true}
         duration={5000}
       />
     </>

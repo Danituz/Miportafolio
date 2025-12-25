@@ -24,23 +24,18 @@ import {
   getAdjacentProjects,
 } from "@/lib/projects";
 
-type Theme = "light" | "dark";
-
 // Category styling
 const categoryStyles = {
   "desarrollo-web": {
-    dark: "bg-indigo-500/20 text-indigo-300 border-indigo-500/30",
-    light: "bg-indigo-100 text-indigo-700 border-indigo-200",
+    className: "bg-indigo-500/20 text-indigo-300 border-indigo-500/30",
     icon: Globe,
   },
   prototipado: {
-    dark: "bg-purple-500/20 text-purple-300 border-purple-500/30",
-    light: "bg-purple-100 text-purple-700 border-purple-200",
+    className: "bg-purple-500/20 text-purple-300 border-purple-500/30",
     icon: Figma,
   },
   apps: {
-    dark: "bg-cyan-500/20 text-cyan-300 border-cyan-500/30",
-    light: "bg-cyan-100 text-cyan-700 border-cyan-200",
+    className: "bg-cyan-500/20 text-cyan-300 border-cyan-500/30",
     icon: Smartphone,
   },
 };
@@ -49,7 +44,6 @@ export default function ProjectDetailPage() {
   const params = useParams();
   const slug = params.slug as string;
 
-  const [theme, setTheme] = useState<Theme>("dark");
   const [language, setLanguage] = useState<Language>("es");
   const [mounted, setMounted] = useState(false);
 
@@ -58,19 +52,15 @@ export default function ProjectDetailPage() {
 
   useEffect(() => {
     setMounted(true);
-    const savedTheme = window.localStorage.getItem("miportafolio-theme") as Theme | null;
     const savedLang = window.localStorage.getItem("miportafolio-language") as Language | null;
-    if (savedTheme) setTheme(savedTheme);
     if (savedLang) setLanguage(savedLang);
   }, []);
 
   useEffect(() => {
     if (!mounted) return;
-    window.localStorage.setItem("miportafolio-theme", theme);
     window.localStorage.setItem("miportafolio-language", language);
-  }, [theme, language, mounted]);
+  }, [language, mounted]);
 
-  const isDark = theme === "dark";
   const t = translations[language];
 
   const project = getProjectBySlug(slug);
@@ -88,14 +78,9 @@ export default function ProjectDetailPage() {
   const CategoryIcon = categoryStyle.icon;
 
   return (
-    <div
-      className={cn(
-        "relative min-h-screen w-full transition-colors duration-300",
-        isDark ? "bg-gray-950 text-indigo-50" : "bg-white text-slate-900"
-      )}
-    >
+    <div className="relative min-h-screen w-full bg-gray-950 text-indigo-50 transition-colors duration-300">
       {/* Particles Background */}
-      <ParticlesBackground isDark={isDark} />
+      <ParticlesBackground />
 
       {/* Fixed Controls - On top of hero */}
       <motion.div
@@ -106,12 +91,7 @@ export default function ProjectDetailPage() {
       >
         <Link
           href="/proyectos"
-          className={cn(
-            "group flex items-center gap-2 rounded-full px-4 py-2.5 text-sm font-medium uppercase tracking-wider backdrop-blur-md transition-all",
-            isDark
-              ? "bg-white/10 text-indigo-100 hover:bg-white/20"
-              : "bg-black/10 text-slate-800 hover:bg-black/20"
-          )}
+          className="group flex items-center gap-2 rounded-full bg-white/10 px-4 py-2.5 text-sm font-medium uppercase tracking-wider text-indigo-100 backdrop-blur-md transition-all hover:bg-white/20"
         >
           <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
           <span className="hidden sm:inline">{t.projectsPage.back}</span>
@@ -130,12 +110,7 @@ export default function ProjectDetailPage() {
             setLanguage(newLang);
             window.localStorage.setItem("miportafolio-language", newLang);
           }}
-          className={cn(
-            "rounded-full px-3 py-2 text-xs font-semibold uppercase backdrop-blur-md transition-all",
-            isDark
-              ? "bg-white/10 text-indigo-100 hover:bg-white/20"
-              : "bg-black/10 text-slate-800 hover:bg-black/20"
-          )}
+          className="rounded-full bg-white/10 px-3 py-2 text-xs font-semibold uppercase text-indigo-100 backdrop-blur-md transition-all hover:bg-white/20"
         >
           {language === "es" ? "EN" : "ES"}
         </button>
@@ -155,14 +130,7 @@ export default function ProjectDetailPage() {
             className="object-cover"
             priority
           />
-          <div
-            className={cn(
-              "absolute inset-0",
-              isDark
-                ? "bg-gradient-to-b from-gray-950/40 via-gray-950/60 to-gray-950"
-                : "bg-gradient-to-b from-white/40 via-white/60 to-white"
-            )}
-          />
+          <div className="absolute inset-0 bg-gradient-to-b from-gray-950/40 via-gray-950/60 to-gray-950" />
         </motion.div>
 
         {/* Hero Content */}
@@ -177,7 +145,7 @@ export default function ProjectDetailPage() {
               <span
                 className={cn(
                   "mb-4 inline-flex items-center gap-2 rounded-full border px-4 py-1.5 text-sm font-medium",
-                  isDark ? categoryStyle.dark : categoryStyle.light
+                  categoryStyle.className
                 )}
               >
                 <CategoryIcon className="h-4 w-4" />
@@ -186,20 +154,10 @@ export default function ProjectDetailPage() {
 
               {/* Title + Year */}
               <div className="flex items-baseline gap-4">
-                <h1
-                  className={cn(
-                    "font-ferron text-4xl uppercase leading-none sm:text-5xl lg:text-6xl",
-                    isDark ? "text-indigo-50" : "text-slate-900"
-                  )}
-                >
+                <h1 className="font-ferron text-4xl uppercase leading-none text-indigo-50 sm:text-5xl lg:text-6xl">
                   {project.title}
                 </h1>
-                <span
-                  className={cn(
-                    "flex items-center gap-1.5 text-sm",
-                    isDark ? "text-indigo-200/70" : "text-slate-500"
-                  )}
-                >
+                <span className="flex items-center gap-1.5 text-sm text-indigo-200/70">
                   <Calendar className="h-4 w-4" />
                   {project.year}
                 </span>
@@ -217,31 +175,16 @@ export default function ProjectDetailPage() {
           transition={{ duration: 0.5, delay: 0.3 }}
         >
           {/* About Section */}
-          <h2
-            className={cn(
-              "font-general text-xs font-semibold uppercase tracking-widest",
-              isDark ? "text-indigo-400" : "text-indigo-600"
-            )}
-          >
+          <h2 className="font-general text-xs font-semibold uppercase tracking-widest text-indigo-400">
             {t.projectsPage.detail.about}
           </h2>
-          <p
-            className={cn(
-              "mt-4 text-lg leading-relaxed",
-              isDark ? "text-indigo-100/80" : "text-slate-600"
-            )}
-          >
+          <p className="mt-4 text-lg leading-relaxed text-indigo-100/80">
             {project.longDescription[language]}
           </p>
 
           {/* Technologies Section */}
           <div className="mt-12">
-            <h2
-              className={cn(
-                "font-general text-xs font-semibold uppercase tracking-widest",
-                isDark ? "text-indigo-400" : "text-indigo-600"
-              )}
-            >
+            <h2 className="font-general text-xs font-semibold uppercase tracking-widest text-indigo-400">
               {project.type === "prototype"
                 ? t.projectsPage.detail.tools
                 : t.projectsPage.detail.technologies}
@@ -251,12 +194,7 @@ export default function ProjectDetailPage() {
               {project.tools.map((tool) => (
                 <span
                   key={tool.name}
-                  className={cn(
-                    "rounded-lg px-3 py-1.5 text-sm font-medium",
-                    isDark
-                      ? "bg-indigo-500/10 text-indigo-200"
-                      : "bg-indigo-50 text-indigo-700"
-                  )}
+                  className="rounded-lg bg-indigo-500/10 px-3 py-1.5 text-sm font-medium text-indigo-200"
                 >
                   {tool.name}
                 </span>
@@ -272,12 +210,7 @@ export default function ProjectDetailPage() {
                   href={project.links.live}
                   target="_blank"
                   rel="noreferrer"
-                  className={cn(
-                    "inline-flex items-center gap-2 rounded-full border px-6 py-3 text-sm font-normal uppercase transition-colors",
-                    isDark
-                      ? "border-indigo-300/60 text-indigo-50 hover:border-indigo-200 hover:text-indigo-50"
-                      : "border-indigo-200 text-indigo-900 hover:border-indigo-300 hover:text-indigo-800"
-                  )}
+                  className="inline-flex items-center gap-2 rounded-full border border-indigo-300/60 px-6 py-3 text-sm font-normal uppercase text-indigo-50 transition-colors hover:border-indigo-200 hover:text-indigo-50"
                 >
                   {t.projectsPage.detail.liveDemo}
                   <ExternalLink className="h-4 w-4" />
@@ -288,12 +221,7 @@ export default function ProjectDetailPage() {
                   href={project.links.figma}
                   target="_blank"
                   rel="noreferrer"
-                  className={cn(
-                    "inline-flex items-center gap-2 rounded-full border px-6 py-3 text-sm font-normal uppercase transition-colors",
-                    isDark
-                      ? "border-indigo-300/60 text-indigo-50 hover:border-indigo-200 hover:text-indigo-50"
-                      : "border-indigo-200 text-indigo-900 hover:border-indigo-300 hover:text-indigo-800"
-                  )}
+                  className="inline-flex items-center gap-2 rounded-full border border-indigo-300/60 px-6 py-3 text-sm font-normal uppercase text-indigo-50 transition-colors hover:border-indigo-200 hover:text-indigo-50"
                 >
                   <Figma className="h-4 w-4" />
                   {t.projectsPage.detail.viewFigma}
@@ -305,10 +233,7 @@ export default function ProjectDetailPage() {
 
         {/* Project Navigation */}
         <motion.div
-          className={cn(
-            "mt-20 flex items-center justify-between border-t pt-10",
-            isDark ? "border-white/10" : "border-slate-200"
-          )}
+          className="mt-20 flex items-center justify-between border-t border-white/10 pt-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
@@ -316,21 +241,11 @@ export default function ProjectDetailPage() {
           {prev ? (
             <Link
               href={`/proyectos/${prev.slug}`}
-              className={cn(
-                "group flex items-center gap-3 transition-colors",
-                isDark
-                  ? "text-indigo-200/70 hover:text-indigo-200"
-                  : "text-slate-500 hover:text-slate-900"
-              )}
+              className="group flex items-center gap-3 text-indigo-200/70 transition-colors hover:text-indigo-200"
             >
               <ArrowLeft className="h-5 w-5 transition-transform group-hover:-translate-x-1" />
               <div>
-                <span
-                  className={cn(
-                    "block text-xs uppercase tracking-wider",
-                    isDark ? "text-indigo-400" : "text-indigo-600"
-                  )}
-                >
+                <span className="block text-xs uppercase tracking-wider text-indigo-400">
                   {t.projectsPage.detail.previousProject}
                 </span>
                 <span className="font-medium">{prev.title}</span>
@@ -343,20 +258,10 @@ export default function ProjectDetailPage() {
           {next ? (
             <Link
               href={`/proyectos/${next.slug}`}
-              className={cn(
-                "group flex items-center gap-3 text-right transition-colors",
-                isDark
-                  ? "text-indigo-200/70 hover:text-indigo-200"
-                  : "text-slate-500 hover:text-slate-900"
-              )}
+              className="group flex items-center gap-3 text-right text-indigo-200/70 transition-colors hover:text-indigo-200"
             >
               <div>
-                <span
-                  className={cn(
-                    "block text-xs uppercase tracking-wider",
-                    isDark ? "text-indigo-400" : "text-indigo-600"
-                  )}
-                >
+                <span className="block text-xs uppercase tracking-wider text-indigo-400">
                   {t.projectsPage.detail.nextProject}
                 </span>
                 <span className="font-medium">{next.title}</span>
@@ -369,7 +274,7 @@ export default function ProjectDetailPage() {
         </motion.div>
       </main>
 
-      <Footer isDark={isDark} language={language} />
+      <Footer language={language} />
     </div>
   );
 }

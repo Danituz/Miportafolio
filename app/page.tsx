@@ -27,13 +27,9 @@ import { cn } from "@/lib/utils";
 import { translations, type Language } from "@/lib/translations";
 import { projects } from "@/lib/projects";
 
-type Theme = "light" | "dark";
-
 type StackItem = {
   name: string;
-  logoDark: string;
-  logoLight: string;
-  invertOnLight?: boolean;
+  logo: string;
 };
 
 type StackSection = {
@@ -45,38 +41,38 @@ const stackSections: StackSection[] = [
   {
     labelKey: "languages",
     items: [
-      { name: "JavaScript", logoDark: "/images/logos/javascript.svg", logoLight: "/images/logos/javascript.svg" },
-      { name: "TypeScript", logoDark: "/images/logos/ts-logo-512.svg", logoLight: "/images/logos/ts-logo-512.svg" },
+      { name: "JavaScript", logo: "/images/logos/javascript.svg" },
+      { name: "TypeScript", logo: "/images/logos/ts-logo-512.svg" },
     ],
   },
   {
     labelKey: "frameworks",
     items: [
-      { name: "React", logoDark: "/images/logos/react_dark.svg", logoLight: "/images/logos/react_dark.svg" },
-      { name: "Next.js", logoDark: "/images/logos/nextjs_icon_dark.svg", logoLight: "/images/logos/nextjs_icon_dark.svg", invertOnLight: true },
-      { name: "Astro", logoDark: "/images/logos/astro-icon-dark.svg", logoLight: "/images/logos/astro-icon-light.svg" },
-      { name: "Node.js", logoDark: "/images/logos/nodejs.svg", logoLight: "/images/logos/nodejs.svg" },
+      { name: "React", logo: "/images/logos/react_dark.svg" },
+      { name: "Next.js", logo: "/images/logos/nextjs_icon_dark.svg" },
+      { name: "Astro", logo: "/images/logos/astro-icon-dark.svg" },
+      { name: "Node.js", logo: "/images/logos/nodejs.svg" },
     ],
   },
   {
     labelKey: "design",
     items: [
-      { name: "Figma", logoDark: "/images/logos/figma.svg", logoLight: "/images/logos/figma.svg" },
-      { name: "Affinity", logoDark: "/images/logos/affinity_designer.svg", logoLight: "/images/logos/affinity_designer.svg" },
+      { name: "Figma", logo: "/images/logos/figma.svg" },
+      { name: "Affinity", logo: "/images/logos/affinity_designer.svg" },
     ],
   },
   {
     labelKey: "uiMotion",
     items: [
-      { name: "shadcn/ui", logoDark: "/images/logos/shadcn-ui_dark.svg", logoLight: "/images/logos/shadcn-ui_light.svg" },
-      { name: "Framer Motion", logoDark: "/images/logos/motion_dark.svg", logoLight: "/images/logos/motion_dark.svg", invertOnLight: true },
+      { name: "shadcn/ui", logo: "/images/logos/shadcn-ui_dark.svg" },
+      { name: "Framer Motion", logo: "/images/logos/motion_dark.svg" },
     ],
   },
   {
     labelKey: "databases",
     items: [
-      { name: "Supabase", logoDark: "/images/logos/supabase.svg", logoLight: "/images/logos/supabase.svg" },
-      { name: "MySQL", logoDark: "/images/logos/mysql-icon-dark.svg", logoLight: "/images/logos/mysql-icon-light.svg" },
+      { name: "Supabase", logo: "/images/logos/supabase.svg" },
+      { name: "MySQL", logo: "/images/logos/mysql-icon-dark.svg" },
     ],
   },
 ];
@@ -116,13 +112,11 @@ function useLocalStorage<T extends string>(
 }
 
 export default function Home() {
-  const [theme, setTheme] = useLocalStorage<Theme>("miportafolio-theme", "dark");
   const [language, setLanguage] = useLocalStorage<Language>(
     "miportafolio-language",
     "es"
   );
 
-  const isDark = theme === "dark";
   const t = translations[language];
 
   const experiences = [
@@ -164,20 +158,13 @@ export default function Home() {
   ];
 
   return (
-    <div
-      className={cn(
-        "relative min-h-screen w-full",
-        isDark ? "bg-gray-950 text-indigo-50" : "bg-white text-slate-900"
-      )}
-    >
+    <div className="relative min-h-screen w-full bg-gray-950 text-indigo-50">
       {/* Bokeh Lights Background */}
-      <ParticlesBackground isDark={isDark} />
+      <ParticlesBackground />
 
       <Navbar
-        isDark={isDark}
         language={language}
         onLanguageChange={setLanguage}
-        onThemeToggle={() => setTheme(isDark ? "light" : "dark")}
       />
 
       <div className="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col px-4 sm:px-6 lg:px-8">
@@ -193,14 +180,7 @@ export default function Home() {
                 className="object-cover object-top"
                 priority
               />
-              <div
-                className={cn(
-                  "absolute inset-0",
-                  isDark
-                    ? "bg-gradient-to-b from-transparent via-gray-950/50 to-gray-950"
-                    : "bg-gradient-to-b from-transparent via-white/50 to-white"
-                )}
-              />
+              <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-950/50 to-gray-950" />
             </div>
 
             {/* Desktop: Avatar con degradado inferior */}
@@ -215,43 +195,23 @@ export default function Home() {
                   priority
                 />
                 {/* Degradado inferior para desvanecer */}
-                <div
-                  className={cn(
-                    "pointer-events-none absolute inset-x-0 bottom-0 h-40",
-                    isDark
-                      ? "bg-gradient-to-t from-gray-950 via-gray-950/80 to-transparent"
-                      : "bg-gradient-to-t from-white via-white/80 to-transparent"
-                  )}
-                />
+                <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-gray-950 via-gray-950/80 to-transparent" />
               </div>
             </div>
 
             {/* Texto */}
             <div className="relative z-10 mt-auto flex flex-col items-center pb-12 text-center lg:mt-0 lg:flex-1 lg:items-end lg:pb-0 lg:text-right">
-              <span
-                className={cn(
-                  "font-allison text-6xl leading-none text-indigo-100 sm:text-7xl lg:text-9xl",
-                  !isDark && "text-indigo-700"
-                )}
-              >
+              <span className="font-allison text-6xl leading-none text-indigo-100 sm:text-7xl lg:text-9xl">
                 {t.hero.portfolio}
               </span>
-              <h1
-                className={cn(
-                  "font-ferron text-5xl uppercase leading-none text-indigo-50 whitespace-nowrap sm:text-7xl lg:text-9xl",
-                  !isDark && "text-slate-900"
-                )}
-              >
+              <h1 className="font-ferron text-5xl uppercase leading-none text-indigo-50 whitespace-nowrap sm:text-7xl lg:text-9xl">
                 DANIEL TUZ
               </h1>
               <div className="flex flex-wrap items-center justify-center pt-6 lg:justify-end lg:pt-4">
                 <Button
                   asChild
                   size="lg"
-                  className={cn(
-                    "gap-3",
-                    !isDark && "bg-indigo-600 text-indigo-50 hover:bg-indigo-500"
-                  )}
+                  className="gap-3"
                 >
                   <a href="#sobre-mi">
                     {t.hero.explore}
@@ -266,31 +226,17 @@ export default function Home() {
             id="sobre-mi"
             className="relative flex flex-col items-center gap-6 px-4 pb-24 pt-32 text-center sm:pt-64"
           >
-            <h2
-              className={cn(
-                "font-ferron text-6xl uppercase leading-none text-indigo-100 sm:text-8xl lg:text-9xl",
-                !isDark && "text-indigo-800"
-              )}
-            >
+            <h2 className="font-ferron text-6xl uppercase leading-none text-indigo-100 sm:text-8xl lg:text-9xl">
               {t.about.title}
             </h2>
-            <p
-              className={cn(
-                "mx-auto max-w-3xl font-general text-base leading-relaxed text-indigo-100/80 sm:text-lg",
-                !isDark && "text-slate-600"
-              )}
-            >
+            <p className="mx-auto max-w-3xl font-general text-base leading-relaxed text-indigo-100/80 sm:text-lg">
               {t.about.description}
             </p>
             <div className="flex items-center gap-3 pt-4">
               <a href="/CV/CV_DanielTuz.pdf" download>
                 <Button
                   variant="outline"
-                  className={cn(
-                    "border-indigo-300/60 px-6 text-sm font-normal uppercase text-indigo-50 hover:border-indigo-200 hover:text-indigo-50",
-                    !isDark &&
-                      "border-indigo-200 text-indigo-900 hover:border-indigo-300 hover:text-indigo-800"
-                  )}
+                  className="border-indigo-300/60 px-6 text-sm font-normal uppercase text-indigo-50 hover:border-indigo-200 hover:text-indigo-50"
                 >
                   {t.about.downloadCV}
                   <ArrowDown className="size-4" />
@@ -300,11 +246,7 @@ export default function Home() {
                 href="https://github.com/Pulparindo70"
                 target="_blank"
                 rel="noreferrer"
-                className={cn(
-                  "flex size-10 items-center justify-center rounded-full border border-indigo-300/60 text-indigo-50 transition hover:border-indigo-200 hover:text-indigo-50",
-                  !isDark &&
-                    "border-indigo-200 text-indigo-800 hover:border-indigo-300 hover:text-indigo-900"
-                )}
+                className="flex size-10 items-center justify-center rounded-full border border-indigo-300/60 text-indigo-50 transition hover:border-indigo-200 hover:text-indigo-50"
               >
                 <Github className="size-5" />
               </a>
@@ -315,20 +257,10 @@ export default function Home() {
             id="stack"
             className="relative flex flex-col items-center gap-6 px-4 py-24 text-center"
           >
-            <h2
-              className={cn(
-                "font-ferron text-5xl uppercase leading-none text-indigo-100 sm:text-7xl",
-                !isDark && "text-indigo-800"
-              )}
-            >
+            <h2 className="font-ferron text-5xl uppercase leading-none text-indigo-100 sm:text-7xl">
               {t.stack.title}
             </h2>
-            <p
-              className={cn(
-                "mx-auto max-w-3xl font-general text-base leading-relaxed text-indigo-100/80 sm:text-lg",
-                !isDark && "text-slate-600"
-              )}
-            >
+            <p className="mx-auto max-w-3xl font-general text-base leading-relaxed text-indigo-100/80 sm:text-lg">
               {t.stack.description}
             </p>
 
@@ -342,48 +274,30 @@ export default function Home() {
                   transition={{ duration: 0.4, delay: idx * 0.1 }}
                   className="flex flex-col items-center gap-4"
                 >
-                  <span
-                    className={cn(
-                      "text-[10px] font-semibold uppercase tracking-[0.2em]",
-                      isDark ? "text-indigo-100/40" : "text-slate-400"
-                    )}
-                  >
+                  <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-indigo-100/40">
                     {t.stack.categories[section.labelKey]}
                   </span>
                   <div className="flex items-center gap-6">
-                    {section.items.map((item) => {
-                      const logoSrc = isDark ? item.logoDark : item.logoLight;
-                      const shouldInvert = !isDark && item.invertOnLight;
-
-                      return (
-                        <div
-                          key={item.name}
-                          className="group flex flex-col items-center gap-2"
-                        >
-                          <div className="flex h-12 w-12 items-center justify-center transition group-hover:-translate-y-1">
-                            <Image
-                              src={logoSrc}
-                              alt={item.name}
-                              width={40}
-                              height={40}
-                              loading="lazy"
-                              className={cn(
-                                "h-10 w-10 object-contain",
-                                shouldInvert && "invert"
-                              )}
-                            />
-                          </div>
-                          <span
-                            className={cn(
-                              "text-[11px] font-medium",
-                              isDark ? "text-indigo-100/50" : "text-slate-500"
-                            )}
-                          >
-                            {item.name}
-                          </span>
+                    {section.items.map((item) => (
+                      <div
+                        key={item.name}
+                        className="group flex flex-col items-center gap-2"
+                      >
+                        <div className="flex h-12 w-12 items-center justify-center transition group-hover:-translate-y-1">
+                          <Image
+                            src={item.logo}
+                            alt={item.name}
+                            width={40}
+                            height={40}
+                            loading="lazy"
+                            className="h-10 w-10 object-contain"
+                          />
                         </div>
-                      );
-                    })}
+                        <span className="text-[11px] font-medium text-indigo-100/50">
+                          {item.name}
+                        </span>
+                      </div>
+                    ))}
                   </div>
                 </motion.div>
               ))}
@@ -394,32 +308,17 @@ export default function Home() {
             id="experiencia"
             className="relative flex flex-col gap-6 px-4 py-24"
           >
-            <h2
-              className={cn(
-                "text-center font-ferron text-5xl uppercase leading-none text-indigo-100 sm:text-7xl",
-                !isDark && "text-indigo-800"
-              )}
-            >
+            <h2 className="text-center font-ferron text-5xl uppercase leading-none text-indigo-100 sm:text-7xl">
               {t.experience.title}
             </h2>
-            <p
-              className={cn(
-                "mx-auto max-w-3xl font-general text-base leading-relaxed text-indigo-100/80 sm:text-lg",
-                !isDark && "text-slate-600"
-              )}
-            >
+            <p className="mx-auto max-w-3xl font-general text-base leading-relaxed text-indigo-100/80 sm:text-lg">
               {t.experience.description}
             </p>
             <div className="relative mx-auto w-full max-w-3xl pt-4">
               {/* Timeline line */}
               <div
                 aria-hidden
-                className={cn(
-                  "pointer-events-none absolute left-[19px] top-8 h-[calc(100%-4rem)] w-px",
-                  isDark
-                    ? "bg-gradient-to-b from-indigo-500/50 via-indigo-100/20 to-transparent"
-                    : "bg-gradient-to-b from-indigo-400/60 via-slate-300/40 to-transparent"
-                )}
+                className="pointer-events-none absolute left-[19px] top-8 h-[calc(100%-4rem)] w-px bg-gradient-to-b from-indigo-500/50 via-indigo-100/20 to-transparent"
               />
 
               <div className="flex flex-col gap-10">
@@ -433,14 +332,7 @@ export default function Home() {
                     className="group relative pl-12"
                   >
                     {/* Timeline dot */}
-                    <div
-                      className={cn(
-                        "absolute left-0 top-2 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full transition-all group-hover:scale-110",
-                        isDark
-                          ? "bg-gray-950 ring-2 ring-indigo-500/50 group-hover:ring-indigo-400"
-                          : "bg-white ring-2 ring-indigo-400/50 group-hover:ring-indigo-500"
-                      )}
-                    >
+                    <div className="absolute left-0 top-2 flex h-10 w-10 items-center justify-center overflow-hidden rounded-full transition-all group-hover:scale-110 bg-gray-950 ring-2 ring-indigo-500/50 group-hover:ring-indigo-400">
                       {exp.logo ? (
                         <Image
                           src={exp.logo}
@@ -451,65 +343,31 @@ export default function Home() {
                           className="h-7 w-7 object-contain"
                         />
                       ) : (
-                        <span
-                          className={cn(
-                            "text-xs font-bold",
-                            isDark ? "text-indigo-300" : "text-indigo-600"
-                          )}
-                        >
+                        <span className="text-xs font-bold text-indigo-300">
                           {exp.name.slice(0, 2).toUpperCase()}
                         </span>
                       )}
                     </div>
 
                     {/* Content card */}
-                    <div
-                      className={cn(
-                        "rounded-xl border p-5 transition-all group-hover:-translate-y-0.5",
-                        isDark
-                          ? "border-indigo-100/10 bg-white/[0.02] group-hover:border-indigo-100/20 group-hover:bg-white/[0.04]"
-                          : "border-slate-200 bg-slate-50/50 group-hover:border-slate-300 group-hover:bg-white"
-                      )}
-                    >
+                    <div className="rounded-xl border p-5 transition-all group-hover:-translate-y-0.5 border-indigo-100/10 bg-white/[0.02] group-hover:border-indigo-100/20 group-hover:bg-white/[0.04]">
                       {/* Header */}
                       <div className="flex flex-wrap items-start justify-between gap-2">
                         <div className="flex flex-col gap-1">
-                          <h3
-                            className={cn(
-                              "text-lg font-semibold",
-                              isDark ? "text-indigo-50" : "text-slate-900"
-                            )}
-                          >
+                          <h3 className="text-lg font-semibold text-indigo-50">
                             {exp.name}
                           </h3>
-                          <span
-                            className={cn(
-                              "text-sm",
-                              isDark ? "text-indigo-100/70" : "text-slate-600"
-                            )}
-                          >
+                          <span className="text-sm text-indigo-100/70">
                             {t.experience.roles[exp.roleKey]}
                           </span>
                         </div>
-                        <span
-                          className={cn(
-                            "rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wider",
-                            isDark
-                              ? "bg-indigo-500/10 text-indigo-300"
-                              : "bg-indigo-100 text-indigo-700"
-                          )}
-                        >
+                        <span className="rounded-full px-3 py-1 text-[11px] font-semibold uppercase tracking-wider bg-indigo-500/10 text-indigo-300">
                           {exp.period}
                         </span>
                       </div>
 
                       {/* Description */}
-                      <p
-                        className={cn(
-                          "mt-3 text-sm leading-relaxed",
-                          isDark ? "text-indigo-100/60" : "text-slate-600"
-                        )}
-                      >
+                      <p className="mt-3 text-sm leading-relaxed text-indigo-100/60">
                         {t.experience.companies[exp.descriptionKey].description}
                       </p>
 
@@ -518,12 +376,7 @@ export default function Home() {
                         {exp.tech.map((tech) => (
                           <span
                             key={tech}
-                            className={cn(
-                              "rounded-full px-2.5 py-1 text-[10px] font-medium",
-                              isDark
-                                ? "bg-indigo-100/10 text-indigo-200"
-                                : "bg-slate-200/80 text-slate-600"
-                            )}
+                            className="rounded-full px-2.5 py-1 text-[10px] font-medium bg-indigo-100/10 text-indigo-200"
                           >
                             {tech}
                           </span>
@@ -536,12 +389,7 @@ export default function Home() {
                           href={exp.link}
                           target="_blank"
                           rel="noreferrer"
-                          className={cn(
-                            "mt-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider transition-colors",
-                            isDark
-                              ? "text-indigo-400 hover:text-indigo-300"
-                              : "text-indigo-600 hover:text-indigo-700"
-                          )}
+                          className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider transition-colors text-indigo-400 hover:text-indigo-300"
                         >
                           {t.experience.viewSite}
                           <ArrowUpRight className="h-3.5 w-3.5" />
@@ -555,18 +403,18 @@ export default function Home() {
           </section>
 
           {/* Projects Section */}
-          <ProjectsSection isDark={isDark} t={t} language={language} />
+          <ProjectsSection t={t} language={language} />
 
           {/* Testimonials Section */}
-          <TestimonialsSection isDark={isDark} t={t} language={language} />
+          <TestimonialsSection t={t} language={language} />
 
           {/* Contact CTA Section */}
-          <ContactCTASection isDark={isDark} t={t} />
+          <ContactCTASection t={t} />
         </main>
       </div>
 
       {/* Footer - Full width */}
-      <Footer isDark={isDark} language={language} />
+      <Footer language={language} />
     </div>
   );
 }
@@ -618,11 +466,9 @@ const testimonials = [
 
 // Projects Section Component with Swiper Carousel
 function ProjectsSection({
-  isDark,
   t,
   language,
 }: {
-  isDark: boolean;
   t: (typeof translations)["es"] | (typeof translations)["en"];
   language: Language;
 }) {
@@ -646,7 +492,7 @@ function ProjectsSection({
     }
 
     .projects-carousel .swiper-pagination-bullet {
-      background-color: ${isDark ? "#818cf8" : "#4f46e5"} !important;
+      background-color: #818cf8 !important;
       opacity: 0.4;
     }
 
@@ -660,12 +506,7 @@ function ProjectsSection({
       id="proyectos"
       className="relative flex flex-col items-center gap-8 px-4 py-24"
     >
-      <h2
-        className={cn(
-          "text-center font-ferron text-5xl uppercase leading-none sm:text-7xl",
-          isDark ? "text-indigo-100" : "text-indigo-800"
-        )}
-      >
+      <h2 className="text-center font-ferron text-5xl uppercase leading-none sm:text-7xl text-indigo-100">
         {t.projects.title}
       </h2>
 
@@ -711,12 +552,7 @@ function ProjectsSection({
         >
           {projects.map((project, index) => (
             <SwiperSlide key={project.slug}>
-              <div
-                className={cn(
-                  "group relative h-full w-full overflow-hidden rounded-3xl",
-                  isDark ? "bg-gray-900" : "bg-white"
-                )}
-              >
+              <div className="group relative h-full w-full overflow-hidden rounded-3xl bg-gray-900">
                 {/* Project Image */}
                 <Image
                   src={project.thumbnail}
@@ -728,11 +564,7 @@ function ProjectsSection({
                 />
 
                 {/* Gradient Overlay */}
-                <div
-                  className={cn(
-                    "absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"
-                  )}
-                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
                 {/* Project Info */}
                 <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
@@ -764,11 +596,7 @@ function ProjectsSection({
               <Link href="/proyectos">
                 <Button
                   variant="outline"
-                  className={cn(
-                    "border-indigo-300/60 px-6 text-sm font-normal uppercase text-indigo-50 hover:border-indigo-200 hover:text-indigo-50",
-                    !isDark &&
-                      "border-indigo-200 text-indigo-900 hover:border-indigo-300 hover:text-indigo-800"
-                  )}
+                  className="border-indigo-300/60 px-6 text-sm font-normal uppercase text-indigo-50 hover:border-indigo-200 hover:text-indigo-50"
                 >
                   {t.projects.viewAll}
                   <ArrowUpRight className="size-4" />
@@ -781,11 +609,9 @@ function ProjectsSection({
 
 // Testimonials Section Component
 function TestimonialsSection({
-  isDark,
   t,
   language,
 }: {
-  isDark: boolean;
   t: (typeof translations)["es"] | (typeof translations)["en"];
   language: Language;
 }) {
@@ -803,20 +629,10 @@ function TestimonialsSection({
       className="relative flex flex-col items-center gap-8 px-4 py-24"
     >
       <div className="text-center">
-        <h2
-          className={cn(
-            "font-ferron text-5xl uppercase leading-none sm:text-7xl",
-            isDark ? "text-indigo-100" : "text-indigo-800"
-          )}
-        >
+        <h2 className="font-ferron text-5xl uppercase leading-none sm:text-7xl text-indigo-100">
           {t.testimonials.title}
         </h2>
-        <p
-          className={cn(
-            "mx-auto mt-4 max-w-2xl font-general text-base",
-            isDark ? "text-indigo-100/60" : "text-slate-600"
-          )}
-        >
+        <p className="mx-auto mt-4 max-w-2xl font-general text-base text-indigo-100/60">
           {t.testimonials.description}
         </p>
       </div>
@@ -829,52 +645,22 @@ function TestimonialsSection({
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-40px" }}
             transition={{ duration: 0.4, delay: index * 0.1 }}
-            className={cn(
-              "group relative rounded-2xl border p-6 transition-all hover:-translate-y-1",
-              isDark
-                ? "border-indigo-500/20 bg-white/[0.02] hover:border-indigo-500/40 hover:bg-white/[0.04]"
-                : "border-indigo-100 bg-white hover:border-indigo-200 hover:shadow-lg"
-            )}
+            className="group relative rounded-2xl border p-6 transition-all hover:-translate-y-1 border-indigo-500/20 bg-white/[0.02] hover:border-indigo-500/40 hover:bg-white/[0.04]"
           >
-            <Quote
-              className={cn(
-                "absolute right-4 top-4 h-8 w-8 opacity-10",
-                isDark ? "text-indigo-300" : "text-indigo-600"
-              )}
-            />
-            <p
-              className={cn(
-                "font-general text-sm leading-relaxed",
-                isDark ? "text-indigo-100/70" : "text-slate-600"
-              )}
-            >
+            <Quote className="absolute right-4 top-4 h-8 w-8 opacity-10 text-indigo-300" />
+            <p className="font-general text-sm leading-relaxed text-indigo-100/70">
               &ldquo;{testimonial.content[language]}&rdquo;
             </p>
             <div className="mt-6 flex items-center justify-between">
               <div>
-                <p
-                  className={cn(
-                    "font-semibold",
-                    isDark ? "text-indigo-50" : "text-slate-900"
-                  )}
-                >
+                <p className="font-semibold text-indigo-50">
                   {testimonial.name}
                 </p>
-                <p
-                  className={cn(
-                    "text-xs",
-                    isDark ? "text-indigo-100/50" : "text-slate-500"
-                  )}
-                >
+                <p className="text-xs text-indigo-100/50">
                   {testimonial.role[language]} · {testimonial.company}
                 </p>
               </div>
-              <span
-                className={cn(
-                  "text-[10px] font-semibold uppercase tracking-wider",
-                  isDark ? "text-indigo-100/30" : "text-slate-400"
-                )}
-              >
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-indigo-100/30">
                 {formatDate(testimonial.date)}
               </span>
             </div>
@@ -887,10 +673,8 @@ function TestimonialsSection({
 
 // Contact CTA Section Component
 function ContactCTASection({
-  isDark,
   t,
 }: {
-  isDark: boolean;
   t: (typeof translations)["es"] | (typeof translations)["en"];
 }) {
   return (
@@ -900,12 +684,7 @@ function ContactCTASection({
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.5 }}
-        className={cn(
-          "mx-auto max-w-4xl overflow-hidden rounded-3xl p-16 sm:p-30",
-          isDark
-            ? "bg-indigo-700/90"
-            : "bg-gradient-to-br from-indigo-600 to-indigo-700"
-        )}
+        className="mx-auto max-w-4xl overflow-hidden rounded-3xl p-16 sm:p-30 bg-indigo-700/90"
       >
         <div className="flex flex-col items-center text-center">
           <span className="font-allison text-3xl -my-3 text-indigo-200 sm:text-4xl">
