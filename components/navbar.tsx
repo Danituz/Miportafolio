@@ -86,13 +86,29 @@ export function Navbar({
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Simular envío (reemplazar con lógica real)
-    await new Promise((resolve) => setTimeout(resolve, 1500));
+    try {
+      const response = await fetch("https://formspree.io/f/xgowddgj", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+        }),
+      });
 
-    setIsSubmitting(false);
-    setContactOpen(false);
-    setShowSuccess(true);
-    setFormData({ name: "", email: "", message: "" });
+      if (response.ok) {
+        setContactOpen(false);
+        setShowSuccess(true);
+        setFormData({ name: "", email: "", message: "" });
+      }
+    } catch (error) {
+      console.error("Error sending message:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const inputClass = cn(
@@ -237,10 +253,10 @@ export function Navbar({
       <header className="sticky top-0 z-50 w-full">
         <div
           className={cn(
-            "border-b backdrop-blur-md transition-colors",
+            "border-b backdrop-blur-xl transition-colors",
             isDark
-              ? "border-white/5 bg-gray-950/80"
-              : "border-slate-200/50 bg-white/80",
+              ? "border-white/10 bg-gray-950/70"
+              : "border-slate-200/60 bg-white/70",
           )}
         >
           <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-4 sm:px-6">
@@ -257,6 +273,7 @@ export function Navbar({
                 alt="Daniel Tuz Logo"
                 width={60}
                 height={60}
+                priority
                 className="rounded-full"
               />
             </Link>
@@ -292,6 +309,7 @@ export function Navbar({
 
             {/* Desktop Controls */}
             <div className="hidden items-center gap-2 md:flex">
+              {/* Theme toggle - hidden for now
               <Button
                 variant="ghost"
                 size="icon"
@@ -306,6 +324,7 @@ export function Navbar({
               >
                 <SunMoon className="h-6 w-6" />
               </Button>
+              */}
 
               <div className="relative" ref={languageMenuRef}>
                 <Button
@@ -361,6 +380,19 @@ export function Navbar({
 
             {/* Mobile Controls */}
             <div className="flex items-center gap-2 md:hidden">
+              <button
+                className={cn(
+                  "flex h-10 w-10 items-center justify-center rounded-full text-sm font-semibold transition",
+                  isDark
+                    ? "text-indigo-100 hover:bg-white/10"
+                    : "text-slate-700 hover:bg-slate-100",
+                )}
+                onClick={() => onLanguageChange(language === "es" ? "en" : "es")}
+                aria-label="Change language"
+              >
+                {language === "es" ? "EN" : "ES"}
+              </button>
+
               <Dialog open={contactOpen} onOpenChange={setContactOpen}>
                 <DialogTrigger asChild>
                   <Button
@@ -428,42 +460,6 @@ export function Navbar({
                 </Link>
               ))}
 
-              {/* Mobile Controls */}
-              <div
-                className={cn(
-                  "mt-2 flex items-center gap-2 border-t pt-4",
-                  isDark ? "border-white/5" : "border-slate-100",
-                )}
-              >
-                <Button
-                  variant="ghost"
-                  size="default"
-                  className={cn(
-                    "flex-1 justify-start gap-2 rounded-xl px-4 py-3",
-                    isDark
-                      ? "text-indigo-100 hover:bg-white/5"
-                      : "text-slate-700 hover:bg-slate-50",
-                  )}
-                  onClick={onThemeToggle}
-                >
-                  <SunMoon className="h-5 w-5" />
-                  {isDark ? t.nav.lightMode : t.nav.darkMode}
-                </Button>
-
-                <Button
-                  variant="ghost"
-                  size="default"
-                  className={cn(
-                    "rounded-xl px-4 py-3",
-                    isDark
-                      ? "text-indigo-100 hover:bg-white/5"
-                      : "text-slate-700 hover:bg-slate-50",
-                  )}
-                  onClick={() => onLanguageChange(language === "es" ? "en" : "es")}
-                >
-                  {language === "es" ? "EN" : "ES"}
-                </Button>
-              </div>
             </nav>
           </div>
         </div>

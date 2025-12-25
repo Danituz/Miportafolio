@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useCallback, useSyncExternalStore } from "react";
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -11,22 +12,20 @@ import "swiper/css/pagination";
 import "swiper/css/autoplay";
 import {
   ArrowDown,
-  ArrowUp,
   ArrowUpRight,
-  ExternalLink,
-  Figma,
   Github,
   Linkedin,
   Mail,
   Quote,
 } from "lucide-react";
-import { FaWhatsapp } from "react-icons/fa";
 
 import { Navbar } from "@/components/navbar";
+import { Footer } from "@/components/footer";
 import { ParticlesBackground } from "@/components/particles-background";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { translations, type Language } from "@/lib/translations";
+import { projects } from "@/lib/projects";
 
 type Theme = "light" | "dark";
 
@@ -167,23 +166,21 @@ export default function Home() {
   return (
     <div
       className={cn(
-        "relative min-h-screen w-full px-4 pb-0 pt-0 sm:px-6 lg:px-8",
+        "relative min-h-screen w-full",
         isDark ? "bg-gray-950 text-indigo-50" : "bg-white text-slate-900"
       )}
     >
       {/* Bokeh Lights Background */}
       <ParticlesBackground isDark={isDark} />
 
-      <div className="-mx-4 sm:-mx-6 lg:-mx-8">
-        <Navbar
-          isDark={isDark}
-          language={language}
-          onLanguageChange={setLanguage}
-          onThemeToggle={() => setTheme(isDark ? "light" : "dark")}
-        />
-      </div>
+      <Navbar
+        isDark={isDark}
+        language={language}
+        onLanguageChange={setLanguage}
+        onThemeToggle={() => setTheme(isDark ? "light" : "dark")}
+      />
 
-      <div className="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col">
+      <div className="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col px-4 sm:px-6 lg:px-8">
         <main className="relative flex flex-1 flex-col pb-26 pt-6">
           <section className=" relative flex min-h-[calc(100vh-80px)] flex-col lg:min-h-0 lg:flex-1 lg:flex-row lg:items-center lg:gap-12">
             {/* Mobile: Avatar como fondo desvanecido */}
@@ -241,7 +238,7 @@ export default function Home() {
               </span>
               <h1
                 className={cn(
-                  "font-ferron text-5xl uppercase leading-none text-indigo-50 sm:text-7xl lg:text-9xl",
+                  "font-ferron text-5xl uppercase leading-none text-indigo-50 whitespace-nowrap sm:text-7xl lg:text-9xl",
                   !isDark && "text-slate-900"
                 )}
               >
@@ -286,19 +283,21 @@ export default function Home() {
               {t.about.description}
             </p>
             <div className="flex items-center gap-3 pt-4">
-              <Button
-                variant="outline"
-                className={cn(
-                  "border-indigo-300/60 px-6 text-sm font-normal uppercase text-indigo-50 hover:border-indigo-200 hover:text-indigo-50",
-                  !isDark &&
-                    "border-indigo-200 text-indigo-900 hover:border-indigo-300 hover:text-indigo-800"
-                )}
-              >
-                {t.about.downloadCV}
-                <ArrowDown className="size-4" />
-              </Button>
+              <a href="/CV/CV_DanielTuz.pdf" download>
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "border-indigo-300/60 px-6 text-sm font-normal uppercase text-indigo-50 hover:border-indigo-200 hover:text-indigo-50",
+                    !isDark &&
+                      "border-indigo-200 text-indigo-900 hover:border-indigo-300 hover:text-indigo-800"
+                  )}
+                >
+                  {t.about.downloadCV}
+                  <ArrowDown className="size-4" />
+                </Button>
+              </a>
               <a
-                href="https://github.com/danieltuz"
+                href="https://github.com/Pulparindo70"
                 target="_blank"
                 rel="noreferrer"
                 className={cn(
@@ -367,6 +366,7 @@ export default function Home() {
                               alt={item.name}
                               width={40}
                               height={40}
+                              loading="lazy"
                               className={cn(
                                 "h-10 w-10 object-contain",
                                 shouldInvert && "invert"
@@ -447,6 +447,7 @@ export default function Home() {
                           alt={exp.name}
                           width={28}
                           height={28}
+                          loading="lazy"
                           className="h-7 w-7 object-contain"
                         />
                       ) : (
@@ -554,7 +555,7 @@ export default function Home() {
           </section>
 
           {/* Projects Section */}
-          <ProjectsSection isDark={isDark} t={t} />
+          <ProjectsSection isDark={isDark} t={t} language={language} />
 
           {/* Testimonials Section */}
           <TestimonialsSection isDark={isDark} t={t} language={language} />
@@ -565,98 +566,53 @@ export default function Home() {
       </div>
 
       {/* Footer - Full width */}
-      <div className="-mx-4 sm:-mx-6 lg:-mx-8">
-        <Footer isDark={isDark} t={t} />
-      </div>
+      <Footer isDark={isDark} language={language} />
     </div>
   );
 }
 
-// Projects data
-const projects = [
-  {
-    name: "ISC Producciones",
-    description: "Sitio web corporativo para productora audiovisual",
-    image: "/images/proyectos/isc producciones.svg",
-    figmaUrl: "#",
-    liveUrl: "#",
-    githubUrl: null,
-  },
-  {
-    name: "Luxtar Cards",
-    description: "Tarjetas digitales personalizadas",
-    image: "/images/proyectos/luxtar cards.svg",
-    figmaUrl: "#",
-    liveUrl: "#",
-    githubUrl: null,
-  },
-  {
-    name: "Mapdam",
-    description: "Plataforma de mapeo y gestión",
-    image: "/images/proyectos/Mapdam.svg",
-    figmaUrl: "#",
-    liveUrl: "#",
-    githubUrl: null,
-  },
-  {
-    name: "Mensajeros",
-    description: "Aplicación de mensajería y logística",
-    image: "/images/proyectos/mensajeros.svg",
-    figmaUrl: null,
-    liveUrl: "#",
-    githubUrl: "#",
-  },
-  {
-    name: "RAF App",
-    description: "Aplicación móvil de gestión",
-    image: "/images/proyectos/raf.app.svg",
-    figmaUrl: "#",
-    liveUrl: "#",
-    githubUrl: null,
-  },
-  {
-    name: "Zombies Last Dawn",
-    description: "Videojuego de supervivencia zombie",
-    image: "/images/proyectos/zombies last dawn.svg",
-    figmaUrl: null,
-    liveUrl: "#",
-    githubUrl: "#",
-  },
-];
 
 // Testimonials data
 const testimonials = [
   {
-    name: "María García",
-    role: "Product Manager",
-    company: "TechCorp",
-    content:
-      "Daniel es un desarrollador excepcional. Su atención al detalle y capacidad para crear interfaces intuitivas superó nuestras expectativas.",
+    name: "Irving Chan",
+    role: { es: "Docente UT Cancún", en: "Professor at UT Cancún" },
+    company: "UT Cancún",
+    content: {
+      es: "Daniel es un desarrollador excepcional. Su atención al detalle y capacidad para crear interfaces intuitivas supera las expectativas.",
+      en: "Daniel is an exceptional developer. His attention to detail and ability to create intuitive interfaces exceeds expectations.",
+    },
     date: "2024-11-15",
   },
   {
-    name: "Carlos López",
-    role: "CEO",
-    company: "StartupXYZ",
-    content:
-      "Trabajar con Daniel fue una experiencia increíble. Entregó el proyecto antes de tiempo y con una calidad impresionante.",
-    date: "2024-10-20",
+    name: "Yanel Noh",
+    role: { es: "Lic. en Mercadotecnia", en: "Marketing Graduate" },
+    company: "Luxtar Media",
+    content: {
+      es: "Trabajar con Daniel fue una experiencia increíble. Entregó el proyecto antes de tiempo y con una calidad impresionante.",
+      en: "Working with Daniel was an incredible experience. He delivered the project ahead of time and with impressive quality.",
+    },
+    date: "2025-02-20",
   },
   {
-    name: "Ana Martínez",
-    role: "Diseñadora UX",
-    company: "DesignStudio",
-    content:
-      "La colaboración con Daniel fue fluida y productiva. Traduce perfectamente los diseños a código funcional y elegante.",
-    date: "2024-09-08",
+    name: "Gustavo Nava",
+    role: { es: "Administrador", en: "Administrator" },
+    company: "Cocity Loft",
+    content: {
+      es: "La colaboración con Daniel fue fluida y productiva. Traduce perfectamente los diseños a código funcional y elegante.",
+      en: "The collaboration with Daniel was smooth and productive. He perfectly translates designs into functional and elegant code.",
+    },
+    date: "2025-09-08",
   },
   {
-    name: "Roberto Sánchez",
-    role: "Tech Lead",
-    company: "DevAgency",
-    content:
-      "Su código es limpio, bien documentado y fácil de mantener. Un profesional que recomiendo sin dudarlo.",
-    date: "2024-08-12",
+    name: "Dania",
+    role: { es: "Marketing", en: "Marketing" },
+    company: "Cocity Loft",
+    content: {
+      es: "Trabajar con Daniel fue una experiencia increíble. Su entrega puntual lo hace ser de confianza.",
+      en: "Working with Daniel was an incredible experience. His punctual delivery makes him trustworthy.",
+    },
+    date: "2025-08-12",
   },
 ];
 
@@ -664,9 +620,11 @@ const testimonials = [
 function ProjectsSection({
   isDark,
   t,
+  language,
 }: {
   isDark: boolean;
   t: (typeof translations)["es"] | (typeof translations)["en"];
+  language: Language;
 }) {
   const swiperStyles = `
     .projects-carousel {
@@ -752,7 +710,7 @@ function ProjectsSection({
           className="projects-carousel"
         >
           {projects.map((project, index) => (
-            <SwiperSlide key={project.name}>
+            <SwiperSlide key={project.slug}>
               <div
                 className={cn(
                   "group relative h-full w-full overflow-hidden rounded-3xl",
@@ -761,8 +719,8 @@ function ProjectsSection({
               >
                 {/* Project Image */}
                 <Image
-                  src={project.image}
-                  alt={project.name}
+                  src={project.thumbnail}
+                  alt={project.title}
                   fill
                   sizes="(max-width: 768px) 100vw, 896px"
                   priority={index < 2}
@@ -779,45 +737,21 @@ function ProjectsSection({
                 {/* Project Info */}
                 <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
                   <h3 className="font-ferron text-2xl uppercase text-white sm:text-3xl">
-                    {project.name}
+                    {project.title}
                   </h3>
                   <p className="mt-1 font-general text-sm text-white/70">
-                    {project.description}
+                    {project.description[language]}
                   </p>
 
-                  {/* Action Buttons */}
-                  <div className="mt-4 flex items-center gap-3">
-                    {project.liveUrl && (
-                      <a
-                        href={project.liveUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-white backdrop-blur-sm transition-colors hover:bg-white/20"
-                      >
-                        {t.projects.live}
-                        <ExternalLink className="h-3 w-3" />
-                      </a>
-                    )}
-                    {project.figmaUrl && (
-                      <a
-                        href={project.figmaUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
-                      >
-                        <Figma className="h-4 w-4" />
-                      </a>
-                    )}
-                    {project.githubUrl && (
-                      <a
-                        href={project.githubUrl}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="flex h-9 w-9 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
-                      >
-                        <Github className="h-4 w-4" />
-                      </a>
-                    )}
+                  {/* Ver más Button */}
+                  <div className="mt-4">
+                    <Link
+                      href={`/proyectos/${project.slug}`}
+                      className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+                    >
+                      {t.projects.viewMore}
+                      <ArrowUpRight className="h-3.5 w-3.5" />
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -827,18 +761,20 @@ function ProjectsSection({
       </motion.div>
 
       {/* View All Button */}
-      <Button
-        variant="outline"
-        className={cn(
-          "mt-4 gap-2 rounded-full font-medium",
-          isDark
-            ? "border-indigo-500/30 text-indigo-100 hover:bg-indigo-500/10"
-            : "border-indigo-200 text-indigo-700 hover:bg-indigo-50"
-        )}
-      >
-        {t.projects.viewAll}
-        <ArrowUpRight className="h-4 w-4" />
-      </Button>
+              <Link href="/proyectos">
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "border-indigo-300/60 px-6 text-sm font-normal uppercase text-indigo-50 hover:border-indigo-200 hover:text-indigo-50",
+                    !isDark &&
+                      "border-indigo-200 text-indigo-900 hover:border-indigo-300 hover:text-indigo-800"
+                  )}
+                >
+                  {t.projects.viewAll}
+                  <ArrowUpRight className="size-4" />
+                </Button>
+              </Link>
+
     </section>
   );
 }
@@ -912,7 +848,7 @@ function TestimonialsSection({
                 isDark ? "text-indigo-100/70" : "text-slate-600"
               )}
             >
-              &ldquo;{testimonial.content}&rdquo;
+              &ldquo;{testimonial.content[language]}&rdquo;
             </p>
             <div className="mt-6 flex items-center justify-between">
               <div>
@@ -930,7 +866,7 @@ function TestimonialsSection({
                     isDark ? "text-indigo-100/50" : "text-slate-500"
                   )}
                 >
-                  {testimonial.role} · {testimonial.company}
+                  {testimonial.role[language]} · {testimonial.company}
                 </p>
               </div>
               <span
@@ -980,7 +916,7 @@ function ContactCTASection({
           </h2>
           <div className="mt-8 flex items-center justify-center gap-3 sm:gap-4">
             <a
-              href="mailto:contacto@danieltuz.com"
+              href="mailto:danieltuz.mio@gmail.com"
               className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white transition-colors hover:bg-white/20 sm:h-auto sm:w-auto sm:gap-2 sm:px-6 sm:py-3"
             >
               <Mail className="h-5 w-5 sm:h-4 sm:w-4" />
@@ -989,7 +925,7 @@ function ContactCTASection({
               </span>
             </a>
             <a
-              href="https://linkedin.com/in/danieltuz"
+              href="https://www.linkedin.com/in/daniel-tuz-b83918389"
               target="_blank"
               rel="noreferrer"
               className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white transition-colors hover:bg-white/20 sm:h-auto sm:w-auto sm:gap-2 sm:px-6 sm:py-3"
@@ -1000,12 +936,12 @@ function ContactCTASection({
               </span>
             </a>
             <a
-              href="https://wa.me/529999999999"
+              href="https://wa.me/529995436203"
               target="_blank"
               rel="noreferrer"
               className="flex h-12 w-12 items-center justify-center rounded-full border border-white/30 bg-white/10 text-white transition-colors hover:bg-white/20 sm:h-auto sm:w-auto sm:gap-2 sm:px-6 sm:py-3"
             >
-              <FaWhatsapp className="h-5 w-5 sm:h-4 sm:w-4" />
+              <svg className="h-5 w-5 sm:h-4 sm:w-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
               <span className="hidden font-general text-sm uppercase tracking-wider sm:inline">
                 {t.cta.whatsapp}
               </span>
@@ -1017,92 +953,3 @@ function ContactCTASection({
   );
 }
 
-// Footer Component
-function Footer({
-  isDark,
-  t,
-}: {
-  isDark: boolean;
-  t: (typeof translations)["es"] | (typeof translations)["en"];
-}) {
-  const currentYear = new Date().getFullYear();
-
-  const footerLinks = [
-    { label: t.footer.sections.about, href: "#sobre-mi" },
-    { label: t.footer.sections.stack, href: "#stack" },
-    { label: t.footer.sections.experience, href: "#experiencia" },
-    { label: t.footer.sections.projects, href: "#proyectos" },
-    { label: t.footer.sections.testimonials, href: "#comentarios" },
-  ];
-
-  return (
-    <footer className="relative overflow-hidden">
-      {/* Gradient top border */}
-      <div className="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-indigo-900 via-purple-500 to-indigo-600" />
-
-      {/* Background Image */}
-      <div className="absolute inset-0">
-        <Image
-          src="/images/material/imagen_footer2.png"
-          alt=""
-          fill
-          className="object-cover"
-        />
-      </div>
-
-      <div className="relative mx-auto max-w-6xl px-4 py-8 sm:px-6">
-        <div className="flex flex-col items-center gap-6 lg:flex-row lg:items-center lg:justify-between">
-          {/* Logo */}
-          <div className="flex flex-col items-center lg:items-start">
-            <span className="font-allison text-2xl -my-1 text-indigo-200">
-              {t.footer.portfolio}
-            </span>
-            <span className="font-ferron text-2xl uppercase leading-none text-white">
-              Daniel Tuz
-            </span>
-          </div>
-
-          {/* Navigation Links */}
-          <nav className="flex flex-wrap items-center justify-center gap-6 lg:gap-8">
-            {footerLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                className="font-general text-xs uppercase tracking-wider text-indigo-100/70 transition-colors hover:text-white"
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
-
-          {/* Social Links */}
-          <div className="flex items-center gap-3">
-            <a
-              href="https://linkedin.com/in/danieltuz"
-              target="_blank"
-              rel="noreferrer"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-indigo-300/30 text-indigo-200 transition-colors hover:border-indigo-300/60 hover:bg-white/10 hover:text-white"
-            >
-              <Linkedin className="h-5 w-5" />
-            </a>
-            <a
-              href="#"
-              target="_blank"
-              rel="noreferrer"
-              className="flex h-10 w-10 items-center justify-center rounded-full border border-indigo-300/30 text-indigo-200 transition-colors hover:border-indigo-300/60 hover:bg-white/10 hover:text-white"
-            >
-              <Github className="h-5 w-5" />
-            </a>
-          </div>
-        </div>
-
-        {/* Copyright */}
-        <div className="mt-6 text-center">
-          <p className="font-general text-[10px] uppercase tracking-wider text-indigo-100/50">
-            ©DanielTuzPortafolio {currentYear}. {t.footer.rights}
-          </p>
-        </div>
-      </div>
-    </footer>
-  );
-}
