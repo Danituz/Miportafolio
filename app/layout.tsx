@@ -51,7 +51,11 @@ const allison = localFont({
 export const metadata: Metadata = {
   title: "Daniel Tuz | Portafolio",
   description:
-    "Landing page personal con modo claro/oscuro y detalles del portafolio de Daniel Tuz.",
+    "Landing page de portafolio de Daniel Tuz - Desarrollador Web Frontend.",
+  icons: {
+    icon: "/mislogos/logodaniel.png",
+    apple: "/mislogos/logodaniel.png",
+  },
 };
 
 export default function RootLayout({
