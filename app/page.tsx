@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useSyncExternalStore } from "react";
+import { useCallback, useState, useRef, useSyncExternalStore } from "react";
+import type { Swiper as SwiperType } from "swiper";
 import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, EffectCreative, Pagination } from "swiper/modules";
@@ -123,7 +124,7 @@ export default function Home() {
     {
       name: "Cocity Loft",
       roleKey: "webDeveloper" as const,
-      period: language === "es" ? "Abr - Nov 2025" : "Apr - Nov 2025",
+      period: language === "es" ? "Abr - Nov 2024" : "Apr - Nov 2024",
       descriptionKey: "cocity" as const,
       tech: [
         "WordPress",
@@ -140,7 +141,7 @@ export default function Home() {
     {
       name: "Luxtar Media",
       roleKey: "fullStackDeveloper" as const,
-      period: language === "es" ? "Ene - Abr 2025" : "Jan - Apr 2025",
+      period: language === "es" ? "Ene - Abr 2024" : "Jan - Apr 2024",
       descriptionKey: "luxtar" as const,
       tech: ["React", "Node.js", "Tailwind", "shadcn/ui", "Supabase"],
       link: null,
@@ -173,12 +174,12 @@ export default function Home() {
             {/* Mobile: Avatar como fondo desvanecido */}
             <div className="absolute inset-x-0 top-0 h-[70vh] lg:hidden">
               <Image
-                src="/avatar.png"
+                src="/avatar.webp"
                 alt="Avatar de Daniel Tuz"
                 fill
                 sizes="100vw"
                 className="object-cover object-top"
-                priority
+                loading="eager"
               />
               <div className="absolute inset-0 bg-gradient-to-b from-transparent via-gray-950/50 to-gray-950" />
             </div>
@@ -187,7 +188,7 @@ export default function Home() {
             <div className="hidden flex-1 items-end justify-start lg:flex">
               <div className="relative h-[600px] w-[600px] translate-y-[70px]">
                 <Image
-                  src="/avatar.png"
+                  src="/avatar.webp"
                   alt="Avatar de Daniel Tuz"
                   fill
                   sizes="420px"
@@ -440,7 +441,7 @@ const testimonials = [
       es: "Trabajar con Daniel fue una experiencia increíble. Entregó el proyecto antes de tiempo y con una calidad impresionante.",
       en: "Working with Daniel was an incredible experience. He delivered the project ahead of time and with impressive quality.",
     },
-    date: "2025-02-20",
+    date: "2024-02-20",
   },
   {
     name: "Gustavo Nava",
@@ -450,7 +451,7 @@ const testimonials = [
       es: "La colaboración con Daniel fue fluida y productiva. Traduce perfectamente los diseños a código funcional y elegante.",
       en: "The collaboration with Daniel was smooth and productive. He perfectly translates designs into functional and elegant code.",
     },
-    date: "2025-09-08",
+    date: "2024-09-08",
   },
   {
     name: "Dania",
@@ -460,7 +461,7 @@ const testimonials = [
       es: "Trabajar con Daniel fue una experiencia increíble. Su entrega puntual lo hace ser de confianza.",
       en: "Working with Daniel was an incredible experience. His punctual delivery makes him trustworthy.",
     },
-    date: "2025-08-12",
+    date: "2024-08-12",
   },
 ];
 
@@ -472,34 +473,27 @@ function ProjectsSection({
   t: (typeof translations)["es"] | (typeof translations)["en"];
   language: Language;
 }) {
-  const swiperStyles = `
-    .projects-carousel {
-      width: 100%;
-      height: 440px;
-      padding-bottom: 50px !important;
-    }
+  const [isReady, setIsReady] = useState(false);
+  const [imagesLoaded, setImagesLoaded] = useState(0);
+  const swiperRef = useRef<SwiperType | null>(null);
 
-    @media (min-width: 640px) {
-      .projects-carousel {
-        height: 500px;
+  // Start autoplay only when first 2 images are loaded
+  const handleImageLoad = () => {
+    setImagesLoaded((prev) => {
+      const newCount = prev + 1;
+      if (newCount >= 2 && swiperRef.current?.autoplay) {
+        swiperRef.current.autoplay.start();
       }
-    }
+      return newCount;
+    });
+  };
 
-    .projects-carousel .swiper-slide {
-      background-position: center;
-      background-size: cover;
-      border-radius: 25px;
-    }
-
-    .projects-carousel .swiper-pagination-bullet {
-      background-color: #818cf8 !important;
-      opacity: 0.4;
-    }
-
-    .projects-carousel .swiper-pagination-bullet-active {
-      opacity: 1;
-    }
-  `;
+  const handleSwiperInit = (swiper: SwiperType) => {
+    swiperRef.current = swiper;
+    // Stop autoplay initially until images load
+    swiper.autoplay.stop();
+    setIsReady(true);
+  };
 
   return (
     <section
@@ -511,98 +505,101 @@ function ProjectsSection({
       </h2>
 
       {/* Swiper Carousel */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
-        viewport={{ once: true, margin: "-100px" }}
-        transition={{ duration: 0.4 }}
-        className="relative w-full max-w-4xl px-5"
-      >
-        <style>{swiperStyles}</style>
+      <div className="relative w-full max-w-4xl px-5">
+        {/* Skeleton loader */}
+        {!isReady && (
+          <div className="h-[440px] sm:h-[500px] w-full animate-pulse rounded-3xl bg-gray-800/50" />
+        )}
 
-        <Swiper
-          spaceBetween={0}
-          autoplay={{
-            delay: 4000,
-            disableOnInteraction: true,
-            pauseOnMouseEnter: true,
-          }}
-          effect="creative"
-          grabCursor={true}
-          slidesPerView={1}
-          centeredSlides={true}
-          loop={true}
-          speed={600}
-          pagination={{
-            clickable: true,
-          }}
-          creativeEffect={{
-            prev: {
-              shadow: false,
-              translate: ["-20%", 0, -200],
-              opacity: 0.5,
-            },
-            next: {
-              translate: ["100%", 0, 0],
-              opacity: 0,
-            },
-          }}
-          modules={[EffectCreative, Pagination, Autoplay]}
-          className="projects-carousel"
-        >
-          {projects.map((project, index) => (
-            <SwiperSlide key={project.slug}>
-              <div className="group relative h-full w-full overflow-hidden rounded-3xl bg-gray-900">
-                {/* Project Image */}
-                <Image
-                  src={project.thumbnail}
-                  alt={project.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 896px"
-                  priority={index < 2}
-                  className="object-cover transition-transform duration-500 will-change-transform group-hover:scale-105"
-                />
+        <div className={cn(
+          "transition-opacity duration-300",
+          isReady && imagesLoaded >= 1 ? "opacity-100" : "opacity-0 absolute inset-0"
+        )}>
+          <Swiper
+            spaceBetween={0}
+            autoplay={{
+              delay: 4000,
+              disableOnInteraction: true,
+              pauseOnMouseEnter: true,
+            }}
+            effect="creative"
+            grabCursor={true}
+            slidesPerView={1}
+            centeredSlides={true}
+            loop={true}
+            speed={600}
+            pagination={{
+              clickable: true,
+            }}
+            creativeEffect={{
+              prev: {
+                shadow: false,
+                translate: ["-20%", 0, -200],
+                opacity: 0.5,
+              },
+              next: {
+                translate: ["100%", 0, 0],
+                opacity: 0,
+              },
+            }}
+            modules={[EffectCreative, Pagination, Autoplay]}
+            className="projects-carousel"
+            onSwiper={handleSwiperInit}
+          >
+            {projects.map((project, index) => (
+              <SwiperSlide key={project.slug}>
+                <div className="group relative h-full w-full overflow-hidden rounded-3xl bg-gray-900">
+                  {/* Project Image */}
+                  <Image
+                    src={project.thumbnail}
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 896px"
+                    priority={index < 2}
+                    onLoad={index < 2 ? handleImageLoad : undefined}
+                    className="object-cover transition-transform duration-500 will-change-transform group-hover:scale-105"
+                  />
 
-                {/* Gradient Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                  {/* Gradient Overlay - always visible */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
 
-                {/* Project Info */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
-                  <h3 className="font-ferron text-2xl uppercase text-white sm:text-3xl">
-                    {project.title}
-                  </h3>
-                  <p className="mt-1 font-general text-sm text-white/70">
-                    {project.description[language]}
-                  </p>
+                  {/* Project Info - always visible */}
+                  <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
+                    <h3 className="font-ferron text-2xl uppercase text-white sm:text-3xl">
+                      {project.title}
+                    </h3>
+                    <p className="mt-1 font-general text-sm text-white/70">
+                      {project.description[language]}
+                    </p>
 
-                  {/* Ver más Button */}
-                  <div className="mt-4">
-                    <Link
-                      href={`/proyectos/${project.slug}`}
-                      className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white backdrop-blur-sm transition-colors hover:bg-white/20"
-                    >
-                      {t.projects.viewMore}
-                      <ArrowUpRight className="h-3.5 w-3.5" />
-                    </Link>
+                    {/* Ver más Button */}
+                    <div className="mt-4">
+                      <Link
+                        href={`/proyectos/${project.slug}`}
+                        className="inline-flex items-center gap-2 rounded-full border border-white/30 bg-white/10 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+                      >
+                        {t.projects.viewMore}
+                        <ArrowUpRight className="h-3.5 w-3.5" />
+                      </Link>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </motion.div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+      </div>
 
       {/* View All Button */}
-              <Link href="/proyectos">
-                <Button
-                  variant="outline"
-                  className="border-indigo-300/60 px-6 text-sm font-normal uppercase text-indigo-50 hover:border-indigo-200 hover:text-indigo-50"
-                >
-                  {t.projects.viewAll}
-                  <ArrowUpRight className="size-4" />
-                </Button>
-              </Link>
-
+      <Link href="/proyectos">
+        <Button
+          variant="outline"
+          className="border-indigo-300/60 px-6 text-sm font-normal uppercase text-indigo-50 hover:border-indigo-200 hover:text-indigo-50"
+        >
+          {t.projects.viewAll}
+          <ArrowUpRight className="size-4" />
+        </Button>
+      </Link>
     </section>
   );
 }

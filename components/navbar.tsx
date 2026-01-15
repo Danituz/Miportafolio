@@ -47,6 +47,7 @@ export function Navbar({
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
 
   const navItems: NavItem[] = [
     { label: t.nav.home, href: "/" },
@@ -82,7 +83,7 @@ export function Navbar({
     setIsSubmitting(true);
 
     try {
-      const response = await fetch("https://formspree.io/f/xgowddgj", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -98,9 +99,11 @@ export function Navbar({
         setContactOpen(false);
         setShowSuccess(true);
         setFormData({ name: "", email: "", message: "" });
+      } else {
+        setShowError(true);
       }
-    } catch (error) {
-      console.error("Error sending message:", error);
+    } catch {
+      setShowError(true);
     } finally {
       setIsSubmitting(false);
     }
@@ -200,7 +203,7 @@ export function Navbar({
   return (
     <>
       <header className="sticky top-0 z-50 w-full">
-        <div className="border-b border-white/10 bg-gray-950/70 backdrop-blur-xl transition-colors">
+        <div className="border-b border-white/10 bg-gray-950/80 backdrop-blur-md transition-colors">
           <div className="mx-auto flex h-20 max-w-6xl items-center justify-between px-4 sm:px-6">
             {/* Logo */}
             <Link
@@ -344,6 +347,15 @@ export function Navbar({
         onClose={() => setShowSuccess(false)}
         title={t.toast.success}
         description={t.toast.successDescription}
+        isDark={true}
+        duration={5000}
+      />
+
+      <Toast
+        open={showError}
+        onClose={() => setShowError(false)}
+        title={t.toast.error}
+        description={t.toast.errorDescription}
         isDark={true}
         duration={5000}
       />

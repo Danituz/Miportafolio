@@ -99,6 +99,8 @@ export const translations = {
     toast: {
       success: "Mensaje enviado",
       successDescription: "Gracias por contactarme. Te responderé pronto.",
+      error: "Error al enviar",
+      errorDescription: "No se pudo enviar el mensaje. Intenta de nuevo.",
     },
     projectsPage: {
       backToHome: "Volver a inicio",
@@ -238,6 +240,8 @@ export const translations = {
     toast: {
       success: "Message sent",
       successDescription: "Thanks for contacting me. I'll respond soon.",
+      error: "Error sending",
+      errorDescription: "Could not send message. Please try again.",
     },
     projectsPage: {
       backToHome: "Back to home",

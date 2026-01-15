@@ -91,9 +91,9 @@ export const projects: Project[] = [
     category: "desarrollo-web",
     type: "code",
     featured: true,
-    thumbnail: "/images/proyectos/isc producciones.svg",
+    thumbnail: "/images/proyectos/isc producciones.webp",
     images: [
-      { src: "/images/proyectos/isc producciones.svg", alt: "ISC Dashboard" },
+      { src: "/images/proyectos/isc producciones.webp", alt: "ISC Dashboard" },
     ],
     tools: [
       { name: "Next.js", category: "frontend" },
@@ -122,9 +122,9 @@ export const projects: Project[] = [
     category: "desarrollo-web",
     type: "code",
     featured: false,
-    thumbnail: "/images/proyectos/luxtar cards.svg",
+    thumbnail: "/images/proyectos/luxtar cards.webp",
     images: [
-      { src: "/images/proyectos/luxtar cards.svg", alt: "Luxtar Cards" },
+      { src: "/images/proyectos/luxtar cards.webp", alt: "Luxtar Cards" },
     ],
     tools: [
       { name: "React", category: "frontend" },
@@ -152,9 +152,9 @@ export const projects: Project[] = [
     category: "prototipado",
     type: "prototype",
     featured: false,
-    thumbnail: "/images/proyectos/Mapdam.svg",
+    thumbnail: "/images/proyectos/Mapdam.webp",
     images: [
-      { src: "/images/proyectos/Mapdam.svg", alt: "Mapdam Prototype" },
+      { src: "/images/proyectos/Mapdam.webp", alt: "Mapdam Prototype" },
     ],
     tools: [
       { name: "Figma", category: "design" },
@@ -179,9 +179,9 @@ export const projects: Project[] = [
     category: "apps",
     type: "code",
     featured: false,
-    thumbnail: "/images/proyectos/mensajeros.svg",
+    thumbnail: "/images/proyectos/mensajeros.webp",
     images: [
-      { src: "/images/proyectos/mensajeros.svg", alt: "Mensajeros App" },
+      { src: "/images/proyectos/mensajeros.webp", alt: "Mensajeros App" },
     ],
     tools: [
       { name: "Next.js", category: "frontend" },
@@ -209,9 +209,9 @@ export const projects: Project[] = [
     category: "desarrollo-web",
     type: "code",
     featured: false,
-    thumbnail: "/images/proyectos/raf.app.svg",
+    thumbnail: "/images/proyectos/raf.app.webp",
     images: [
-      { src: "/images/proyectos/raf.app.svg", alt: "RAF App" },
+      { src: "/images/proyectos/raf.app.webp", alt: "RAF App" },
     ],
     tools: [
       { name: "React", category: "frontend" },

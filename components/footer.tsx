@@ -29,8 +29,9 @@ export function Footer({ language }: FooterProps) {
       {/* Background Image */}
       <div className="absolute inset-0">
         <Image
-          src="/images/material/imagen_footer2.png"
+          src="/images/material/imagen_footer2.webp"
           alt=""
+          role="presentation"
           fill
           sizes="100vw"
           loading="lazy"
